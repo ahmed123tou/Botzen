@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -29,7 +30,7 @@
       width: 100%;
       max-width: 500px;
 
-      padding: 45px 40px;
+      padding: 40px;
 
       text-align: center;
 
@@ -37,6 +38,19 @@
       border-radius: 16px;
 
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .botzen-icon {
+      width: 100px;
+      height: 100px;
+
+      object-fit: contain;
+
+      margin-bottom: 18px;
+
+      mix-blend-mode: multiply;
+
+      border-radius: 20px;
     }
 
     h1 {
@@ -87,7 +101,7 @@
     }
 
     .discord-btn:active {
-      transform: translateY(0);
+      transform: scale(0.97);
     }
 
     .required {
@@ -103,33 +117,46 @@
         padding: 35px 25px;
       }
 
+      .botzen-icon {
+        width: 85px;
+        height: 85px;
+      }
+
       h1 {
         font-size: 30px;
       }
     }
   </style>
+
 </head>
 
 <body>
 
   <div class="signup-container">
 
-    <h1>Sign up with Discord</h1>
+```
+<img
+  class="botzen-icon"
+  src="https://img.icons8.com/nolan/1200/bot.jpg"
+  alt="Botzen"
+>
 
-    <p class="subtitle">
-      Discord authentication is required to use Botzen.
-    </p>
+<h1>Sign up with Discord</h1>
 
-    <button class="discord-btn">
-      Sign up with Discord
-    </button>
+<p class="subtitle">
+  Discord authentication is required to use Botzen.
+</p>
 
-    <p class="required">
-      🔒 Secure Discord authentication required
-    </p>
+<button class="discord-btn">
+  Sign up with Discord
+</button>
+
+<p class="required">
+  🔒 Secure Discord authentication required
+</p>
+```
 
   </div>
 
 </body>
 </html>
-
