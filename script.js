@@ -26,6 +26,13 @@ const passwordToggle =
 document.getElementById("passwordToggle");
 
 /* =========================
+BOTZEN BACKEND
+========================= */
+
+const BOTZEN_BACKEND =
+"https://botzen-r4do.onrender.com";
+
+/* =========================
 DISCORD LOGIN
 ========================= */
 
@@ -43,7 +50,7 @@ discordButton.addEventListener("click", function () {
         "1545716437987893308";
 
     const redirectUri =
-        "https://botzen-r4do.onrender.com/callback";
+        BOTZEN_BACKEND + "/callback";
 
     const discordOAuth =
         "https://discord.com/oauth2/authorize" +
@@ -54,7 +61,8 @@ discordButton.addEventListener("click", function () {
         encodeURIComponent(redirectUri) +
         "&scope=identify";
 
-    window.location.href = discordOAuth;
+    window.location.href =
+        discordOAuth;
 });
 
 
@@ -69,9 +77,11 @@ if (signupButton) {
 
 signupButton.addEventListener("click", function () {
 
-    loginScreen.style.display = "none";
+    loginScreen.style.display =
+        "none";
 
-    signupScreen.style.display = "block";
+    signupScreen.style.display =
+        "block";
 
     document.title =
         "Botzen — Create Account";
@@ -89,14 +99,17 @@ if (backButton) {
 
 backButton.addEventListener("click", function () {
 
-    signupScreen.style.display = "none";
+    signupScreen.style.display =
+        "none";
 
-    loginScreen.style.display = "block";
+    loginScreen.style.display =
+        "block";
 
     document.title =
         "Botzen — Sign Up";
 
-    signupMessage.textContent = "";
+    signupMessage.textContent =
+        "";
 });
 
 
@@ -113,14 +126,16 @@ passwordToggle.addEventListener("click", function () {
 
     if (passwordInput.type === "password") {
 
-        passwordInput.type = "text";
+        passwordInput.type =
+            "text";
 
         passwordToggle.textContent =
             "Hide";
 
     } else {
 
-        passwordInput.type = "password";
+        passwordInput.type =
+            "password";
 
         passwordToggle.textContent =
             "Show";
@@ -168,11 +183,24 @@ signupForm.addEventListener("submit", function (event) {
     }
 
 
-    /* Account information is valid.
-       Open the Botzen dashboard. */
+    signupMessage.textContent =
+        "Account created! Opening Botzen...";
 
-    window.location.href =
-        "/dashboard.html";
+
+    /*
+        The frontend is hosted on GitHub Pages,
+        so /dashboard.html would incorrectly
+        point to GitHub Pages.
+
+        Send the user directly to Render instead.
+    */
+
+    setTimeout(function () {
+
+        window.location.href =
+            BOTZEN_BACKEND + "/dashboard.html";
+
+    }, 500);
 });
 
 
