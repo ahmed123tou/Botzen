@@ -26,7 +26,7 @@ return res.status(500).send(
 );
 }
 
-```
+
 const params = new URLSearchParams({
     client_id: CLIENT_ID,
     response_type: "code",
@@ -38,14 +38,14 @@ res.redirect(
     "https://discord.com/oauth2/authorize?" +
     params.toString()
 );
-```
+
 
 });
 
 app.get("/callback", async (req, res) => {
 const code = req.query.code;
 
-```
+
 if (!code) {
     return res.status(400).send(
         "Discord authorization code is missing."
@@ -220,7 +220,7 @@ try {
         "Botzen could not connect to Discord."
     );
 }
-```
+
 
 });
 
