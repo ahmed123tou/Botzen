@@ -29,14 +29,16 @@ extended: true
 app.use(express.static(__dirname));
 
 /* =========================
-DATABASE
+MONGODB
 ========================= */
 
 async function connectDatabase() {
 
 ```
 if (!MONGODB_URI) {
-    throw new Error("MONGODB_URI is missing.");
+    throw new Error(
+        "MONGODB_URI environment variable is missing."
+    );
 }
 
 mongoClient = new MongoClient(MONGODB_URI);
@@ -48,44 +50,71 @@ database = mongoClient.db("Botzen");
 console.log("✅ Connected to MongoDB.");
 console.log("📦 Database: Botzen");
 
-await database.collection("users").createIndex(
-    { discordId: 1 },
-    {
-        unique: true,
-        sparse: true
-    }
-);
 
-await database.collection("users").createIndex(
-    { username: 1 },
-    {
-        unique: true,
-        sparse: true
-    }
-);
+await database
+    .collection("users")
+    .createIndex(
+        {
+            discordId: 1
+        },
+        {
+            unique: true,
+            sparse: true
+        }
+    );
 
-await database.collection("bots").createIndex({
-    ownerId: 1
-});
 
-await database.collection("bots").createIndex(
-    { botKey: 1 },
-    {
-        unique: true,
-        sparse: true
-    }
-);
+await database
+    .collection("users")
+    .createIndex(
+        {
+            username: 1
+        },
+        {
+            unique: true,
+            sparse: true
+        }
+    );
 
-await database.collection("sessions").createIndex(
-    { sessionId: 1 },
-    {
-        unique: true
-    }
-);
 
-await database.collection("announcements").createIndex({
-    createdAt: -1
-});
+await database
+    .collection("bots")
+    .createIndex({
+        ownerId: 1
+    });
+
+
+await database
+    .collection("bots")
+    .createIndex(
+        {
+            botKey: 1
+        },
+        {
+            unique: true,
+            sparse: true
+        }
+    );
+
+
+await database
+    .collection("sessions")
+    .createIndex(
+        {
+            sessionId: 1
+        },
+        {
+            unique: true
+        }
+    );
+
+
+await database
+    .collection("announcements")
+    .createIndex({
+        createdAt: -1
+    });
+
 
 console.log("✅ MongoDB indexes ready.");
 ```
@@ -109,14 +138,22 @@ return crypto
 async function createSession(userId) {
 
 ```
-const sessionId = createSessionId();
+const sessionId =
+    createSessionId();
 
-await database.collection("sessions").insertOne({
-    sessionId,
-    userId,
-    createdAt: new Date(),
-    lastUsedAt: new Date()
-});
+await database
+    .collection("sessions")
+    .insertOne({
+
+        sessionId: sessionId,
+
+        userId: userId,
+
+        createdAt: new Date(),
+
+        lastUsedAt: new Date()
+
+    });
 
 return sessionId;
 ```
@@ -140,23 +177,33 @@ res.setHeader(
 function getSessionId(req) {
 
 ```
-const cookieHeader = req.headers.cookie || "";
+const cookieHeader =
+    req.headers.cookie || "";
 
-const cookies = cookieHeader
-    .split(";")
-    .map(function(item) {
-        return item.trim();
-    });
+const cookies =
+    cookieHeader
+        .split(";")
+        .map(function(item) {
+            return item.trim();
+        });
+
 
 for (const cookie of cookies) {
 
-    if (cookie.startsWith("botzen_session=")) {
+    if (
+        cookie.startsWith(
+            "botzen_session="
+        )
+    ) {
 
         return decodeURIComponent(
-            cookie.substring("botzen_session=".length)
+            cookie.substring(
+                "botzen_session=".length
+            )
         );
     }
 }
+
 
 return null;
 ```
@@ -170,27 +217,34 @@ if (!database) {
     return null;
 }
 
-const sessionId = getSessionId(req);
+
+const sessionId =
+    getSessionId(req);
+
 
 if (!sessionId) {
     return null;
 }
 
-const session = await database
-    .collection("sessions")
-    .findOne({
-        sessionId
-    });
+
+const session =
+    await database
+        .collection("sessions")
+        .findOne({
+            sessionId: sessionId
+        });
+
 
 if (!session) {
     return null;
 }
 
+
 await database
     .collection("sessions")
     .updateOne(
         {
-            sessionId
+            sessionId: sessionId
         },
         {
             $set: {
@@ -198,6 +252,7 @@ await database
             }
         }
     );
+
 
 return database
     .collection("users")
@@ -216,7 +271,10 @@ app.get("/", function(req, res) {
 
 ```
 res.sendFile(
-    path.join(__dirname, "index.html")
+    path.join(
+        __dirname,
+        "index.html"
+    )
 );
 ```
 
@@ -226,377 +284,570 @@ res.sendFile(
 HEALTH
 ========================= */
 
-app.get("/api/health", async function(req, res) {
+app.get(
+"/api/health",
+async function(req, res) {
 
 ```
-try {
+    try {
 
-    await database.command({
-        ping: 1
-    });
+        if (!database) {
 
-    res.json({
-        ok: true,
-        database: true,
-        message: "Botzen is online and MongoDB is connected."
-    });
+            return res.status(503).json({
+                ok: false,
+                database: false,
+                message:
+                    "Database is not connected."
+            });
+        }
 
-} catch (error) {
 
-    console.error(error);
+        await database.command({
+            ping: 1
+        });
 
-    res.status(500).json({
-        ok: false,
-        database: false
-    });
-}
-```
 
-});
+        res.json({
+            ok: true,
+            database: true,
+            message:
+                "Botzen is online and MongoDB is connected."
+        });
 
-/* =========================
-CURRENT ACCOUNT
-========================= */
 
-app.get("/api/me", async function(req, res) {
+    } catch (error) {
 
-```
-try {
+        console.error(
+            "Health error:",
+            error
+        );
 
-    const user = await getCurrentUser(req);
 
-    if (!user) {
-
-        return res.status(401).json({
-            authenticated: false
+        res.status(500).json({
+            ok: false,
+            database: false,
+            message:
+                "MongoDB connection failed."
         });
     }
-
-    res.json({
-        authenticated: true,
-
-        user: {
-            id: user._id.toString(),
-            username: user.username || null,
-            displayName: user.displayName || null,
-            discordId: user.discordId || null,
-            discordUsername: user.discordUsername || null,
-            avatar: user.avatar || null,
-            role: user.role || "user"
-        }
-    });
-
-} catch (error) {
-
-    console.error("ME error:", error);
-
-    res.status(500).json({
-        authenticated: false,
-        message: "Could not load account."
-    });
 }
 ```
 
-});
+);
+
+/* =========================
+CURRENT USER
+========================= */
+
+app.get(
+"/api/me",
+async function(req, res) {
+
+```
+    try {
+
+        const user =
+            await getCurrentUser(req);
+
+
+        if (!user) {
+
+            return res.status(401).json({
+                authenticated: false
+            });
+        }
+
+
+        res.json({
+
+            authenticated: true,
+
+            user: {
+
+                id:
+                    user._id.toString(),
+
+                username:
+                    user.username || null,
+
+                displayName:
+                    user.displayName || null,
+
+                discordId:
+                    user.discordId || null,
+
+                discordUsername:
+                    user.discordUsername || null,
+
+                avatar:
+                    user.avatar || null,
+
+                role:
+                    user.role || "user"
+
+            }
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Current user error:",
+            error
+        );
+
+
+        res.status(500).json({
+            authenticated: false,
+            message:
+                "Could not load account."
+        });
+    }
+}
+```
+
+);
 
 /* =========================
 DISCORD OAUTH
 ========================= */
 
-app.get("/auth/discord", function(req, res) {
+app.get(
+"/auth/discord",
+function(req, res) {
 
 ```
-if (!CLIENT_ID || !REDIRECT_URI) {
+    if (
+        !CLIENT_ID ||
+        !REDIRECT_URI
+    ) {
 
-    return res.status(500).send(
-        "Discord OAuth is not configured."
+        return res.status(500).send(
+            "Discord OAuth is not configured."
+        );
+    }
+
+
+    const params =
+        new URLSearchParams({
+
+            client_id:
+                CLIENT_ID,
+
+            response_type:
+                "code",
+
+            redirect_uri:
+                REDIRECT_URI,
+
+            scope:
+                "identify"
+
+        });
+
+
+    res.redirect(
+        "https://discord.com/oauth2/authorize?" +
+        params.toString()
     );
 }
-
-const params = new URLSearchParams({
-
-    client_id: CLIENT_ID,
-
-    response_type: "code",
-
-    redirect_uri: REDIRECT_URI,
-
-    scope: "identify"
-});
-
-res.redirect(
-    "https://discord.com/oauth2/authorize?" +
-    params.toString()
-);
 ```
 
-});
+);
 
 /* =========================
 DISCORD CALLBACK
 ========================= */
 
-app.get("/callback", async function(req, res) {
+app.get(
+"/callback",
+async function(req, res) {
 
 ```
-const code = req.query.code;
+    const code =
+        req.query.code;
 
-if (!code) {
 
-    return res.status(400).send(
-        "Discord authorization code is missing."
-    );
-}
+    if (!code) {
 
-if (
-    !CLIENT_ID ||
-    !CLIENT_SECRET ||
-    !REDIRECT_URI
-) {
-
-    return res.status(500).send(
-        "Discord OAuth is not configured."
-    );
-}
-
-try {
-
-    const tokenResponse = await fetch(
-        "https://discord.com/api/v10/oauth2/token",
-        {
-            method: "POST",
-
-            headers: {
-                "Content-Type":
-                    "application/x-www-form-urlencoded",
-
-                "Accept":
-                    "application/json",
-
-                "User-Agent":
-                    "Botzen/1.0"
-            },
-
-            body: new URLSearchParams({
-
-                client_id: CLIENT_ID,
-
-                client_secret: CLIENT_SECRET,
-
-                grant_type:
-                    "authorization_code",
-
-                code,
-
-                redirect_uri:
-                    REDIRECT_URI
-
-            }).toString()
-        }
-    );
-
-    const tokenText =
-        await tokenResponse.text();
-
-    if (tokenResponse.status === 429) {
-
-        return res.status(429).send(
-            "Discord is temporarily rate-limiting Botzen. Please try again later."
-        );
-    }
-
-    if (!tokenResponse.ok) {
-
-        console.error(
-            "Discord OAuth error:",
-            tokenText
-        );
-
-        return res.status(502).send(
-            "Discord rejected the authentication request."
-        );
-    }
-
-    const tokenData =
-        JSON.parse(tokenText);
-
-    if (!tokenData.access_token) {
-
-        return res.status(502).send(
-            "Discord did not provide an access token."
+        return res.status(400).send(
+            "Discord authorization code is missing."
         );
     }
 
 
-    const userResponse = await fetch(
-        "https://discord.com/api/v10/users/@me",
-        {
-            headers: {
-                "Authorization":
-                    "Bearer " +
-                    tokenData.access_token,
+    if (
+        !CLIENT_ID ||
+        !CLIENT_SECRET ||
+        !REDIRECT_URI
+    ) {
 
-                "Accept":
-                    "application/json",
-
-                "User-Agent":
-                    "Botzen/1.0"
-            }
-        }
-    );
-
-    const userText =
-        await userResponse.text();
-
-    if (!userResponse.ok) {
-
-        console.error(
-            "Discord user error:",
-            userText
-        );
-
-        return res.status(502).send(
-            "Discord could not provide your account information."
+        return res.status(500).send(
+            "Discord OAuth is not configured."
         );
     }
 
-    const discordUser =
-        JSON.parse(userText);
+
+    try {
+
+        console.log(
+            "🔐 Starting Discord OAuth..."
+        );
 
 
-    const users =
-        database.collection("users");
+        const tokenResponse =
+            await fetch(
+                "https://discord.com/api/v10/oauth2/token",
+                {
 
-    let existingUser =
-        await users.findOne({
-            discordId:
-                discordUser.id
-        });
+                    method: "POST",
 
+                    headers: {
 
-    if (!existingUser) {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded",
 
-        const newUser = {
+                        "Accept":
+                            "application/json",
 
-            discordId:
-                discordUser.id,
+                        "User-Agent":
+                            "Botzen/1.0"
 
-            discordUsername:
-                discordUser.username,
+                    },
 
-            displayName:
-                discordUser.global_name ||
-                discordUser.username,
+                    body:
+                        new URLSearchParams({
 
-            avatar:
-                discordUser.avatar
-                    ? "https://cdn.discordapp.com/avatars/" +
-                      discordUser.id +
-                      "/" +
-                      discordUser.avatar +
-                      ".png?size=256"
-                    : null,
+                            client_id:
+                                CLIENT_ID,
 
-            role:
-                "user",
+                            client_secret:
+                                CLIENT_SECRET,
 
-            createdAt:
-                new Date(),
+                            grant_type:
+                                "authorization_code",
 
-            updatedAt:
-                new Date()
-        };
+                            code:
+                                code,
 
+                            redirect_uri:
+                                REDIRECT_URI
 
-        const result =
-            await users.insertOne(
-                newUser
+                        }).toString()
+
+                }
             );
 
 
-        existingUser =
-            await users.findOne({
-                _id:
-                    result.insertedId
-            });
+        const tokenText =
+            await tokenResponse.text();
 
-    } else {
 
-        await users.updateOne(
-            {
-                _id:
-                    existingUser._id
-            },
-            {
-                $set: {
+        console.log(
+            "Discord token HTTP status:",
+            tokenResponse.status
+        );
 
-                    discordUsername:
-                        discordUser.username,
 
-                    displayName:
-                        discordUser.global_name ||
-                        discordUser.username,
+        if (
+            tokenResponse.status === 429
+        ) {
 
-                    avatar:
-                        discordUser.avatar
-                            ? "https://cdn.discordapp.com/avatars/" +
-                              discordUser.id +
-                              "/" +
-                              discordUser.avatar +
-                              ".png?size=256"
-                            : null,
+            const retryAfter =
+                tokenResponse.headers.get(
+                    "retry-after"
+                );
 
-                    updatedAt:
-                        new Date()
+
+            console.error(
+                "Discord OAuth rate limited."
+            );
+
+
+            console.error(
+                "Retry-After:",
+                retryAfter
+            );
+
+
+            return res.status(429).send(
+                "Discord is temporarily rate-limiting Botzen. Please try again later."
+            );
+        }
+
+
+        if (!tokenResponse.ok) {
+
+            console.error(
+                "Discord OAuth response:",
+                tokenText.substring(
+                    0,
+                    2000
+                )
+            );
+
+
+            return res.status(502).send(
+                "Discord rejected the authentication request."
+            );
+        }
+
+
+        let tokenData;
+
+
+        try {
+
+            tokenData =
+                JSON.parse(
+                    tokenText
+                );
+
+        } catch (error) {
+
+            return res.status(502).send(
+                "Discord returned an invalid authentication response."
+            );
+        }
+
+
+        if (
+            !tokenData.access_token
+        ) {
+
+            return res.status(502).send(
+                "Discord did not provide an access token."
+            );
+        }
+
+
+        const userResponse =
+            await fetch(
+                "https://discord.com/api/v10/users/@me",
+                {
+
+                    method: "GET",
+
+                    headers: {
+
+                        "Authorization":
+                            "Bearer " +
+                            tokenData.access_token,
+
+                        "Accept":
+                            "application/json",
+
+                        "User-Agent":
+                            "Botzen/1.0"
+
+                    }
+
                 }
-            }
+            );
+
+
+        const userText =
+            await userResponse.text();
+
+
+        if (
+            userResponse.status === 429
+        ) {
+
+            return res.status(429).send(
+                "Discord is temporarily rate-limiting Botzen. Please try again later."
+            );
+        }
+
+
+        if (!userResponse.ok) {
+
+            console.error(
+                "Discord user response:",
+                userText.substring(
+                    0,
+                    2000
+                )
+            );
+
+
+            return res.status(502).send(
+                "Discord could not provide your account information."
+            );
+        }
+
+
+        let discordUser;
+
+
+        try {
+
+            discordUser =
+                JSON.parse(
+                    userText
+                );
+
+        } catch (error) {
+
+            return res.status(502).send(
+                "Discord returned invalid account information."
+            );
+        }
+
+
+        console.log(
+            "✅ Discord login:",
+            discordUser.username,
+            discordUser.id
         );
 
-        existingUser =
+
+        const users =
+            database.collection(
+                "users"
+            );
+
+
+        let existingUser =
             await users.findOne({
-                _id:
-                    existingUser._id
+                discordId:
+                    discordUser.id
             });
-    }
 
 
-    const sessionId =
-        await createSession(
-            existingUser._id
+        const avatar =
+            discordUser.avatar
+                ? "https://cdn.discordapp.com/avatars/" +
+                  discordUser.id +
+                  "/" +
+                  discordUser.avatar +
+                  ".png?size=256"
+                : null;
+
+
+        if (!existingUser) {
+
+            const newUser = {
+
+                discordId:
+                    discordUser.id,
+
+                discordUsername:
+                    discordUser.username,
+
+                displayName:
+                    discordUser.global_name ||
+                    discordUser.username,
+
+                avatar:
+                    avatar,
+
+                role:
+                    "user",
+
+                createdAt:
+                    new Date(),
+
+                updatedAt:
+                    new Date()
+
+            };
+
+
+            const result =
+                await users.insertOne(
+                    newUser
+                );
+
+
+            existingUser =
+                await users.findOne({
+                    _id:
+                        result.insertedId
+                });
+
+
+        } else {
+
+            await users.updateOne(
+
+                {
+                    _id:
+                        existingUser._id
+                },
+
+                {
+                    $set: {
+
+                        discordUsername:
+                            discordUser.username,
+
+                        displayName:
+                            discordUser.global_name ||
+                            discordUser.username,
+
+                        avatar:
+                            avatar,
+
+                        updatedAt:
+                            new Date()
+
+                    }
+                }
+            );
+
+
+            existingUser =
+                await users.findOne({
+                    _id:
+                        existingUser._id
+                });
+        }
+
+
+        const sessionId =
+            await createSession(
+                existingUser._id
+            );
+
+
+        setSessionCookie(
+            res,
+            sessionId
         );
 
-    setSessionCookie(
-        res,
-        sessionId
-    );
 
-    res.redirect(
-        "/dashboard.html"
-    );
+        console.log(
+            "✅ Botzen session created."
+        );
 
-} catch (error) {
 
-    console.error(
-        "OAuth connection error:",
-        error
-    );
+        res.redirect(
+            "/dashboard.html"
+        );
 
-    res.status(500).send(
-        "Botzen could not connect to Discord."
-    );
+
+    } catch (error) {
+
+        console.error(
+            "❌ OAuth error:",
+            error
+        );
+
+
+        res.status(500).send(
+            "Botzen could not connect to Discord."
+        );
+    }
 }
 ```
 
-});
+);
 
 /* =========================
 ANNOUNCEMENTS
 ========================= */
-
-/*
-PUBLIC:
-Everyone can read announcements.
-*/
 
 app.get(
 "/api/announcements",
@@ -607,7 +858,9 @@ async function(req, res) {
 
         const announcements =
             await database
-                .collection("announcements")
+                .collection(
+                    "announcements"
+                )
                 .find({})
                 .sort({
                     createdAt: -1
@@ -615,9 +868,12 @@ async function(req, res) {
                 .limit(50)
                 .toArray();
 
+
         res.json({
-            announcements
+            announcements:
+                announcements
         });
+
 
     } catch (error) {
 
@@ -625,6 +881,7 @@ async function(req, res) {
             "Announcement load error:",
             error
         );
+
 
         res.status(500).json({
             message:
@@ -636,10 +893,9 @@ async function(req, res) {
 
 );
 
-/*
-ADMIN:
-Admin key must be supplied EVERY TIME.
-*/
+/* =========================
+CREATE ANNOUNCEMENT
+========================= */
 
 app.post(
 "/api/announcements",
@@ -651,68 +907,128 @@ async function(req, res) {
         const user =
             await getCurrentUser(req);
 
+
         if (!user) {
 
             return res.status(401).json({
+
                 success: false,
+
                 message:
                     "You must be logged in."
+
             });
         }
 
 
-        const {
-            adminKey,
-            title,
-            message
-        } = req.body;
+        const adminKey =
+            typeof req.body.adminKey === "string"
+                ? req.body.adminKey
+                : "";
+
+
+        const title =
+            typeof req.body.title === "string"
+                ? req.body.title.trim()
+                : "";
+
+
+        const message =
+            typeof req.body.message === "string"
+                ? req.body.message.trim()
+                : "";
 
 
         if (!ADMIN_SECRET) {
 
+            console.error(
+                "ADMIN_SECRET is missing."
+            );
+
+
             return res.status(500).json({
+
                 success: false,
+
                 message:
-                    "ADMIN_SECRET is not configured on the server."
+                    "Admin system is not configured."
+
             });
         }
 
 
+        /*
+           The key is checked SERVER-SIDE.
+           It must be entered for EVERY announcement.
+        */
+
         if (
-            !adminKey ||
             adminKey !== ADMIN_SECRET
         ) {
 
             return res.status(403).json({
+
                 success: false,
+
                 message:
                     "Invalid admin key."
+
+            });
+        }
+
+
+        if (!title) {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message:
+                    "Announcement title is required."
+
+            });
+        }
+
+
+        if (!message) {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message:
+                    "Announcement message is required."
+
             });
         }
 
 
         if (
-            !title ||
-            !message
+            title.length > 150
         ) {
 
             return res.status(400).json({
+
                 success: false,
+
                 message:
-                    "Title and message are required."
+                    "Announcement title is too long."
+
             });
         }
 
 
         if (
-            title.length > 150 ||
             message.length > 5000
         ) {
 
             return res.status(400).json({
+
                 success: false,
+
                 message:
-                    "Announcement is too long."
+                    "Announcement message is too long."
+
             });
         }
 
@@ -720,10 +1036,10 @@ async function(req, res) {
         const announcement = {
 
             title:
-                title.trim(),
+                title,
 
             message:
-                message.trim(),
+                message,
 
             author: {
 
@@ -738,18 +1054,28 @@ async function(req, res) {
 
                 avatar:
                     "https://files.catbox.moe/c0eqba.png"
+
             },
 
             createdAt:
                 new Date()
+
         };
 
 
         await database
-            .collection("announcements")
+            .collection(
+                "announcements"
+            )
             .insertOne(
                 announcement
             );
+
+
+        console.log(
+            "📢 Announcement published:",
+            title
+        );
 
 
         res.json({
@@ -758,7 +1084,9 @@ async function(req, res) {
 
             message:
                 "Announcement published successfully."
+
         });
+
 
     } catch (error) {
 
@@ -767,10 +1095,14 @@ async function(req, res) {
             error
         );
 
+
         res.status(500).json({
+
             success: false,
+
             message:
                 "Could not publish announcement."
+
         });
     }
 }
@@ -792,10 +1124,13 @@ async function(req, res) {
         const user =
             await getCurrentUser(req);
 
+
         if (!user) {
 
             return res.status(401).json({
+
                 authenticated: false
+
             });
         }
 
@@ -843,9 +1178,13 @@ async function(req, res) {
 
                         botKey:
                             bot.botKey
+
                     };
+
                 })
+
         });
+
 
     } catch (error) {
 
@@ -854,9 +1193,12 @@ async function(req, res) {
             error
         );
 
+
         res.status(500).json({
+
             message:
                 "Could not load bots."
+
         });
     }
 }
@@ -878,61 +1220,84 @@ async function(req, res) {
         const user =
             await getCurrentUser(req);
 
+
         if (!user) {
 
             return res.status(401).json({
+
                 success: false,
+
                 message:
                     "You must be logged in."
+
             });
         }
 
 
-        const {
-            token,
-            tutorialComplete
-        } = req.body;
+        const token =
+            typeof req.body.token === "string"
+                ? req.body.token.trim()
+                : "";
+
+
+        const tutorialComplete =
+            req.body.tutorialComplete === true;
 
 
         if (!tutorialComplete) {
 
             return res.status(400).json({
+
                 success: false,
+
                 message:
-                    "You must complete every tutorial step first."
+                    "Complete every tutorial step first."
+
             });
         }
 
 
-        if (!token || token.length < 20) {
+        if (
+            !token ||
+            token.length < 20
+        ) {
 
             return res.status(400).json({
+
                 success: false,
+
                 message:
                     "Please enter a valid Discord bot token."
+
             });
         }
 
 
         /*
-           Token is sent directly to Discord.
-           It is NEVER returned to the browser.
+           Validate the token directly with Discord.
         */
 
         const botResponse =
             await fetch(
                 "https://discord.com/api/v10/users/@me",
                 {
+
+                    method: "GET",
+
                     headers: {
+
                         "Authorization":
-                            "Bot " + token,
+                            "Bot " +
+                            token,
 
                         "Accept":
                             "application/json",
 
                         "User-Agent":
                             "Botzen/1.0"
+
                     }
+
                 }
             );
 
@@ -941,26 +1306,68 @@ async function(req, res) {
             await botResponse.text();
 
 
-        if (!botResponse.ok) {
+        if (
+            botResponse.status === 429
+        ) {
 
-            return res.status(400).json({
+            return res.status(429).json({
+
                 success: false,
+
                 message:
-                    "Discord rejected this bot token."
+                    "Discord is rate-limiting Botzen. Please try again later."
+
             });
         }
 
 
-        const botUser =
-            JSON.parse(botText);
-
-
-        if (!botUser.bot) {
+        if (!botResponse.ok) {
 
             return res.status(400).json({
+
                 success: false,
+
+                message:
+                    "Discord rejected this bot token."
+
+            });
+        }
+
+
+        let botUser;
+
+
+        try {
+
+            botUser =
+                JSON.parse(
+                    botText
+                );
+
+        } catch (error) {
+
+            return res.status(502).json({
+
+                success: false,
+
+                message:
+                    "Discord returned invalid bot information."
+
+            });
+        }
+
+
+        if (
+            botUser.bot !== true
+        ) {
+
+            return res.status(400).json({
+
+                success: false,
+
                 message:
                     "That Discord account is not a bot."
+
             });
         }
 
@@ -975,15 +1382,19 @@ async function(req, res) {
 
                     botId:
                         botUser.id
+
                 });
 
 
         if (existing) {
 
             return res.status(409).json({
+
                 success: false,
+
                 message:
                     "You already added this bot."
+
             });
         }
 
@@ -1005,11 +1416,6 @@ async function(req, res) {
                 : null;
 
 
-        /*
-           For now the token is stored server-side.
-           It is never placed in frontend storage.
-        */
-
         await database
             .collection("bots")
             .insertOne({
@@ -1027,11 +1433,19 @@ async function(req, res) {
                 username:
                     botUser.username,
 
-                avatar,
+                avatar:
+                    avatar,
 
-                botKey,
+                botKey:
+                    botKey,
 
-                token,
+                /*
+                   Token stays on backend.
+                   It is NEVER returned to frontend.
+                */
+
+                token:
+                    token,
 
                 online:
                     false,
@@ -1044,7 +1458,15 @@ async function(req, res) {
 
                 updatedAt:
                     new Date()
+
             });
+
+
+        console.log(
+            "🤖 Bot added:",
+            botUser.username,
+            botUser.id
+        );
 
 
         res.json({
@@ -1063,10 +1485,14 @@ async function(req, res) {
                 username:
                     botUser.username,
 
-                avatar,
+                avatar:
+                    avatar,
 
-                botKey
+                botKey:
+                    botKey
+
             }
+
         });
 
 
@@ -1077,10 +1503,14 @@ async function(req, res) {
             error
         );
 
+
         res.status(500).json({
+
             success: false,
+
             message:
                 "Could not add bot."
+
         });
     }
 }
@@ -1102,10 +1532,16 @@ async function(req, res) {
         const user =
             await getCurrentUser(req);
 
+
         if (!user) {
 
             return res.status(401).json({
-                success: false
+
+                success: false,
+
+                message:
+                    "You must be logged in."
+
             });
         }
 
@@ -1117,9 +1553,12 @@ async function(req, res) {
         ) {
 
             return res.status(400).json({
+
                 success: false,
+
                 message:
                     "Invalid bot."
+
             });
         }
 
@@ -1136,15 +1575,19 @@ async function(req, res) {
 
                     ownerId:
                         user._id
+
                 });
 
 
         if (!bot) {
 
             return res.status(404).json({
+
                 success: false,
+
                 message:
                     "Bot not found."
+
             });
         }
 
@@ -1156,6 +1599,7 @@ async function(req, res) {
         await database
             .collection("bots")
             .updateOne(
+
                 {
                     _id:
                         bot._id,
@@ -1163,11 +1607,16 @@ async function(req, res) {
                     ownerId:
                         user._id
                 },
+
                 {
                     $set: {
-                        locked,
+
+                        locked:
+                            locked,
+
                         updatedAt:
                             new Date()
+
                     }
                 }
             );
@@ -1177,7 +1626,9 @@ async function(req, res) {
 
             success: true,
 
-            locked
+            locked:
+                locked
+
         });
 
 
@@ -1188,8 +1639,14 @@ async function(req, res) {
             error
         );
 
+
         res.status(500).json({
-            success: false
+
+            success: false,
+
+            message:
+                "Could not change bot lock."
+
         });
     }
 }
@@ -1210,6 +1667,7 @@ async function(req, res) {
 
         const user =
             await getCurrentUser(req);
+
 
         if (!user) {
 
@@ -1243,6 +1701,7 @@ async function(req, res) {
 
                     ownerId:
                         user._id
+
                 });
 
 
@@ -1254,15 +1713,29 @@ async function(req, res) {
         }
 
 
+        if (
+            bot.locked === true
+        ) {
+
+            return res.status(403).send(
+                "This bot key is currently locked."
+            );
+        }
+
+
         const invite =
             "https://discord.com/oauth2/authorize" +
             "?client_id=" +
-            encodeURIComponent(bot.botId) +
+            encodeURIComponent(
+                bot.botId
+            ) +
             "&permissions=0" +
             "&scope=bot%20applications.commands";
 
 
-        res.redirect(invite);
+        res.redirect(
+            invite
+        );
 
 
     } catch (error) {
@@ -1271,6 +1744,7 @@ async function(req, res) {
             "Invite error:",
             error
         );
+
 
         res.status(500).send(
             "Could not create invite."
@@ -1295,12 +1769,16 @@ async function(req, res) {
         const sessionId =
             getSessionId(req);
 
+
         if (sessionId) {
 
             await database
                 .collection("sessions")
                 .deleteOne({
-                    sessionId
+
+                    sessionId:
+                        sessionId
+
                 });
         }
 
@@ -1313,7 +1791,9 @@ async function(req, res) {
 
 
         res.json({
+
             success: true
+
         });
 
 
@@ -1324,8 +1804,11 @@ async function(req, res) {
             error
         );
 
+
         res.status(500).json({
+
             success: false
+
         });
     }
 }
@@ -1334,7 +1817,7 @@ async function(req, res) {
 );
 
 /* =========================
-START
+START SERVER
 ========================= */
 
 async function startServer() {
@@ -1344,6 +1827,7 @@ try {
 
     await connectDatabase();
 
+
     app.listen(
         PORT,
         function() {
@@ -1352,8 +1836,10 @@ try {
                 "🤖 Botzen running on port " +
                 PORT
             );
+
         }
     );
+
 
 } catch (error) {
 
@@ -1361,6 +1847,7 @@ try {
         "❌ Could not start Botzen:",
         error
     );
+
 
     process.exit(1);
 }
