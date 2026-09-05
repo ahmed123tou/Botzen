@@ -9,31 +9,15 @@ const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
 
-// ================================
-// Basic configuration check
-// ================================
-
 if (!CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI) {
 console.warn("⚠️ Discord OAuth environment variables are missing.");
 }
 
-// ================================
-// Static files
-// ================================
-
 app.use(express.static(__dirname));
-
-// ================================
-// Home
-// ================================
 
 app.get("/", (req, res) => {
 res.sendFile(path.join(__dirname, "index.html"));
 });
-
-// ================================
-// Start Discord OAuth
-// ================================
 
 app.get("/auth/discord", (req, res) => {
 const discordURL =
@@ -49,10 +33,6 @@ res.redirect(discordURL);
 
 });
 
-// ================================
-// Discord OAuth callback
-// ================================
-
 app.get("/callback", async (req, res) => {
 const code = req.query.code;
 
@@ -62,16 +42,13 @@ if (!code) {
 }
 
 try {
-    // Exchange code for access token
     const tokenResponse = await fetch(
         "https://discord.com/api/oauth2/token",
         {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-
             body: new URLSearchParams({
                 client_id: CLIENT_ID,
                 client_secret: CLIENT_SECRET,
@@ -86,18 +63,14 @@ try {
 
     if (!tokenResponse.ok) {
         console.error("Discord token error:", tokenData);
-
-        return res.status(500).send(
-            "Discord authentication failed."
-        );
+        return res.status(500).send("Discord authentication failed.");
     }
 
-    // Get Discord account
     const userResponse = await fetch(
         "https://discord.com/api/users/@me",
         {
             headers: {
-                Authorization: `Bearer ${tokenData.access_token}`
+                Authorization: "Bearer " + tokenData.access_token
             }
         }
     );
@@ -106,7 +79,6 @@ try {
 
     if (!userResponse.ok) {
         console.error("Discord user error:", user);
-
         return res.status(500).send(
             "Could not retrieve your Discord account."
         );
@@ -114,253 +86,265 @@ try {
 
     console.log("Botzen user:", user);
 
-    // ================================
-    // Temporary dashboard
-    // ================================
+    const avatarURL = user.avatar
+        ? "https://cdn.discordapp.com/avatars/" +
+          user.id +
+          "/" +
+          user.avatar +
+          ".png"
+        : "";
+
+    const username = escapeHTML(
+        user.global_name || user.username || "Discord User"
+    );
+
+    const userID = escapeHTML(user.id);
 
     res.send(`
-        <!DOCTYPE html>
+```
 
-        <html lang="en">
+<!DOCTYPE html>
 
-        <head>
+<html lang="en">
 
-            <meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
 
-            <meta name="viewport"
-                  content="width=device-width, initial-scale=1.0">
+```
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-            <title>Botzen — Dashboard</title>
+<title>Botzen — Dashboard</title>
 
-            <style>
+<style>
 
-                * {
-                    box-sizing: border-box;
-                }
+    * {
+        box-sizing: border-box;
+    }
 
-                body {
-                    margin: 0;
-                    min-height: 100vh;
+    body {
+        margin: 0;
+        min-height: 100vh;
 
-                    font-family: Arial, Helvetica, sans-serif;
+        font-family: Arial, Helvetica, sans-serif;
 
-                    background: #111214;
-                    color: white;
-                }
+        background: #111214;
+        color: white;
+    }
 
-                .sidebar {
-                    position: fixed;
+    .sidebar {
+        position: fixed;
 
-                    width: 250px;
-                    height: 100vh;
+        width: 250px;
+        height: 100vh;
 
-                    padding: 25px 15px;
+        padding: 25px 15px;
 
-                    background: #18191c;
+        background: #18191c;
 
-                    border-right:
-                        1px solid rgba(255,255,255,0.05);
-                }
+        border-right: 1px solid rgba(255,255,255,0.05);
+    }
 
-                .brand {
-                    font-size: 24px;
-                    font-weight: 800;
+    .brand {
+        font-size: 24px;
+        font-weight: 800;
 
-                    margin-bottom: 30px;
+        margin-bottom: 30px;
 
-                    padding-left: 10px;
-                }
+        padding-left: 10px;
+    }
 
-                .section-title {
-                    color: #72767d;
+    .section-title {
+        color: #72767d;
 
-                    font-size: 11px;
-                    font-weight: 800;
+        font-size: 11px;
+        font-weight: 800;
 
-                    margin: 20px 10px 8px;
+        margin: 20px 10px 8px;
 
-                    letter-spacing: 1px;
-                }
+        letter-spacing: 1px;
+    }
 
-                .nav-item {
-                    padding: 11px 12px;
+    .nav-item {
+        padding: 11px 12px;
 
-                    border-radius: 7px;
+        border-radius: 7px;
 
-                    color: #b5bac1;
+        color: #b5bac1;
 
-                    margin-bottom: 4px;
+        margin-bottom: 4px;
 
-                    cursor: pointer;
-                }
+        cursor: pointer;
+    }
 
-                .nav-item:hover {
-                    background: #2b2d31;
-                    color: white;
-                }
+    .nav-item:hover {
+        background: #2b2d31;
+        color: white;
+    }
 
-                .content {
-                    margin-left: 250px;
+    .content {
+        margin-left: 250px;
+        padding: 45px;
+    }
 
-                    padding: 45px;
-                }
+    .welcome {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
 
-                .welcome {
-                    font-size: 32px;
-                    font-weight: 800;
+    .description {
+        color: #b5bac1;
+        margin-bottom: 30px;
+    }
 
-                    margin-bottom: 10px;
-                }
+    .user-card {
+        display: flex;
+        align-items: center;
 
-                .description {
-                    color: #b5bac1;
+        gap: 15px;
 
-                    margin-bottom: 30px;
-                }
+        padding: 20px;
 
-                .user-card {
-                    display: flex;
-                    align-items: center;
+        max-width: 600px;
 
-                    gap: 15px;
+        background: #1e1f22;
 
-                    padding: 20px;
+        border-radius: 12px;
+    }
 
-                    max-width: 600px;
+    .avatar {
+        width: 55px;
+        height: 55px;
 
-                    background: #1e1f22;
+        border-radius: 50%;
 
-                    border-radius: 12px;
-                }
+        object-fit: cover;
+    }
 
-                .avatar {
-                    width: 55px;
-                    height: 55px;
+    .username {
+        font-size: 18px;
+        font-weight: 700;
+    }
 
-                    border-radius: 50%;
+    .id {
+        color: #72767d;
+        font-size: 13px;
+        margin-top: 4px;
+    }
 
-                    object-fit: cover;
-                }
+    @media (max-width: 700px) {
 
-                .username {
-                    font-size: 18px;
-                    font-weight: 700;
-                }
+        .sidebar {
+            width: 210px;
+        }
 
-                .id {
-                    color: #72767d;
-                    font-size: 13px;
-                    margin-top: 4px;
-                }
+        .content {
+            margin-left: 210px;
+            padding: 25px;
+        }
 
-                @media (max-width: 700px) {
+        .welcome {
+            font-size: 26px;
+        }
 
-                    .sidebar {
-                        width: 210px;
-                    }
+    }
 
-                    .content {
-                        margin-left: 210px;
-                        padding: 25px;
-                    }
+</style>
+```
 
-                    .welcome {
-                        font-size: 26px;
-                    }
+</head>
 
-                }
+<body>
 
-            </style>
+```
+<aside class="sidebar">
 
-        </head>
+    <div class="brand">
+        🤖 Botzen
+    </div>
 
-        <body>
+    <div class="section-title">
+        🌐 INFORMATION
+    </div>
 
-            <aside class="sidebar">
+    <div class="nav-item">
+        🏠│Home
+    </div>
 
-                <div class="brand">
-                    🤖 Botzen
-                </div>
+    <div class="nav-item">
+        📜│Announcements
+    </div>
 
-                <div class="section-title">
-                    🌐 INFORMATION
-                </div>
+    <div class="section-title">
+        🤖 BOT DIRECTORY
+    </div>
 
-                <div class="nav-item">
-                    🏠│Home
-                </div>
+    <div class="nav-item">
+        🤖│My Bots
+    </div>
 
-                <div class="nav-item">
-                    📜│Announcements
-                </div>
+    <div class="nav-item">
+        ➕│Add Bot
+    </div>
 
-                <div class="section-title">
-                    🤖 BOT DIRECTORY
-                </div>
+    <div class="section-title">
+        🔗 CONNECTIONS
+    </div>
 
-                <div class="nav-item">
-                    🤖│My Bots
-                </div>
+    <div class="nav-item">
+        ✉️│Invite
+    </div>
 
-                <div class="nav-item">
-                    ➕│Add Bot
-                </div>
+</aside>
 
-                <div class="section-title">
-                    🔗 CONNECTIONS
-                </div>
+<main class="content">
 
-                <div class="nav-item">
-                    ✉️│Invite
-                </div>
+    <div class="welcome">
+        Welcome to Botzen 👋
+    </div>
 
-            </aside>
+    <div class="description">
+        Your Discord account is connected successfully.
+    </div>
 
-            <main class="content">
+    <div class="user-card">
 
-                <div class="welcome">
-                    Welcome to Botzen 👋
-                </div>
+        ${
+            avatarURL
+                ? `<img
+                    class="avatar"
+                    src="${avatarURL}"
+                    alt="Discord Avatar"
+                  >`
+                : `<div class="avatar"></div>`
+        }
 
-                <div class="description">
-                    Your Discord account is connected successfully.
-                </div>
+        <div>
 
-                <div class="user-card">
+            <div class="username">
+                ${username}
+            </div>
 
-                    ${
-                        user.avatar
-                            ? `<img
-                                class="avatar"
-                                src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png"
-                                alt="Avatar"
-                              >`
-                            : `<div class="avatar"></div>`
-                    }
+            <div class="id">
+                Discord ID: ${userID}
+            </div>
 
-                    <div>
+        </div>
 
-                        <div class="username">
-                            ${escapeHTML(
-                                user.global_name || user.username
-                            )}
-                        </div>
+    </div>
 
-                        <div class="id">
-                            Discord ID: ${escapeHTML(user.id)}
-                        </div>
+</main>
+```
 
-                    </div>
+</body>
 
-                </div>
+</html>
+        `);
 
-            </main>
-
-        </body>
-
-        </html>
-    `);
-
+```
 } catch (error) {
 
     console.error("OAuth error:", error);
@@ -369,13 +353,9 @@ try {
         "Something went wrong while connecting to Discord."
     );
 }
-
+```
 
 });
-
-// ================================
-// HTML escaping
-// ================================
 
 function escapeHTML(value) {
 return String(value)
@@ -386,11 +366,6 @@ return String(value)
 .replace(/'/g, "'");
 }
 
-// ================================
-// Start server
-// ================================
-
 app.listen(PORT, () => {
-console.log(`🤖 Botzen running on port ${PORT}`);
+console.log("🤖 Botzen running on port " + PORT);
 });
-
