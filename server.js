@@ -86,267 +86,76 @@ try {
 
     console.log("Botzen user:", user);
 
-    const avatarURL = user.avatar
-        ? "https://cdn.discordapp.com/avatars/" +
-          user.id +
-          "/" +
-          user.avatar +
-          ".png"
-        : "";
-
-    const username = escapeHTML(
-        user.global_name || user.username || "Discord User"
-    );
-
-    const userID = escapeHTML(user.id);
-
+    // Temporary authentication proof
     res.send(`
-```
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Botzen — Dashboard</title>
+        </head>
+
+        <body style="
+            margin: 0;
+            background: #111214;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        ">
+
+            <div style="
+                text-align: center;
+                padding: 40px;
+                background: #1e1f22;
+                border-radius: 18px;
+                max-width: 500px;
+                width: calc(100% - 40px);
+            ">
+
+                <h1>Welcome to Botzen 👋</h1>
+
+                <p style="color: #b5bac1;">
+                    Discord authentication successful!
+                </p>
+
+                <p>
+                    Welcome,
+                    <strong>${escapeHTML(
+                        user.global_name || user.username || "Discord User"
+                    )}</strong>
+                </p>
+
+                <p style="color: #72767d; font-size: 13px;">
+                    Discord ID: ${escapeHTML(user.id)}
+                </p>
+
+                <a
+                    href="/dashboard.html"
+                    style="
+                        display: inline-block;
+                        margin-top: 20px;
+                        padding: 12px 20px;
+                        border-radius: 8px;
+                        background: #5865f2;
+                        color: white;
+                        text-decoration: none;
+                        font-weight: bold;
+                    "
+                >
+                    Enter Dashboard
+                </a>
 
-<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-
-```
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Botzen — Dashboard</title>
-
-<style>
-
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        min-height: 100vh;
-
-        font-family: Arial, Helvetica, sans-serif;
-
-        background: #111214;
-        color: white;
-    }
-
-    .sidebar {
-        position: fixed;
-
-        width: 250px;
-        height: 100vh;
-
-        padding: 25px 15px;
-
-        background: #18191c;
-
-        border-right: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .brand {
-        font-size: 24px;
-        font-weight: 800;
-
-        margin-bottom: 30px;
-
-        padding-left: 10px;
-    }
-
-    .section-title {
-        color: #72767d;
-
-        font-size: 11px;
-        font-weight: 800;
-
-        margin: 20px 10px 8px;
-
-        letter-spacing: 1px;
-    }
-
-    .nav-item {
-        padding: 11px 12px;
-
-        border-radius: 7px;
-
-        color: #b5bac1;
-
-        margin-bottom: 4px;
-
-        cursor: pointer;
-    }
-
-    .nav-item:hover {
-        background: #2b2d31;
-        color: white;
-    }
-
-    .content {
-        margin-left: 250px;
-        padding: 45px;
-    }
-
-    .welcome {
-        font-size: 32px;
-        font-weight: 800;
-        margin-bottom: 10px;
-    }
-
-    .description {
-        color: #b5bac1;
-        margin-bottom: 30px;
-    }
-
-    .user-card {
-        display: flex;
-        align-items: center;
-
-        gap: 15px;
-
-        padding: 20px;
-
-        max-width: 600px;
-
-        background: #1e1f22;
-
-        border-radius: 12px;
-    }
-
-    .avatar {
-        width: 55px;
-        height: 55px;
-
-        border-radius: 50%;
-
-        object-fit: cover;
-    }
-
-    .username {
-        font-size: 18px;
-        font-weight: 700;
-    }
-
-    .id {
-        color: #72767d;
-        font-size: 13px;
-        margin-top: 4px;
-    }
-
-    @media (max-width: 700px) {
-
-        .sidebar {
-            width: 210px;
-        }
-
-        .content {
-            margin-left: 210px;
-            padding: 25px;
-        }
-
-        .welcome {
-            font-size: 26px;
-        }
-
-    }
-
-</style>
-```
-
-</head>
-
-<body>
-
-```
-<aside class="sidebar">
-
-    <div class="brand">
-        🤖 Botzen
-    </div>
-
-    <div class="section-title">
-        🌐 INFORMATION
-    </div>
-
-    <div class="nav-item">
-        🏠│Home
-    </div>
-
-    <div class="nav-item">
-        📜│Announcements
-    </div>
-
-    <div class="section-title">
-        🤖 BOT DIRECTORY
-    </div>
-
-    <div class="nav-item">
-        🤖│My Bots
-    </div>
-
-    <div class="nav-item">
-        ➕│Add Bot
-    </div>
-
-    <div class="section-title">
-        🔗 CONNECTIONS
-    </div>
-
-    <div class="nav-item">
-        ✉️│Invite
-    </div>
-
-</aside>
-
-<main class="content">
-
-    <div class="welcome">
-        Welcome to Botzen 👋
-    </div>
-
-    <div class="description">
-        Your Discord account is connected successfully.
-    </div>
-
-    <div class="user-card">
-
-        ${
-            avatarURL
-                ? `<img
-                    class="avatar"
-                    src="${avatarURL}"
-                    alt="Discord Avatar"
-                  >`
-                : `<div class="avatar"></div>`
-        }
-
-        <div>
-
-            <div class="username">
-                ${username}
             </div>
 
-            <div class="id">
-                Discord ID: ${userID}
-            </div>
+        </body>
+        </html>
+    `);
 
-        </div>
-
-    </div>
-
-</main>
-```
-
-</body>
-
-</html>
-        `);
-
-```
 } catch (error) {
-
     console.error("OAuth error:", error);
 
     res.status(500).send(
