@@ -29,6 +29,8 @@
         alt="Botzen"
     >
 
+    <!-- LOGIN SCREEN -->
+
     <div id="loginScreen">
 
         <h1>Welcome to Botzen</h1>
@@ -64,6 +66,8 @@
     </div>
 
 
+    <!-- SIGNUP SCREEN -->
+
     <div id="signupScreen" style="display: none;">
 
         <h1>Create your Botzen account</h1>
@@ -82,21 +86,25 @@
                 required
             >
 
-            <input
-                id="password"
-                type="password"
-                placeholder="Password"
-                autocomplete="new-password"
-                required
-            >
+            <div class="password-wrapper">
 
-            <input
-                id="confirmPassword"
-                type="password"
-                placeholder="Confirm password"
-                autocomplete="new-password"
-                required
-            >
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Password"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <button
+                    id="passwordToggle"
+                    class="password-toggle"
+                    type="button"
+                >
+                    Show
+                </button>
+
+            </div>
 
             <button
                 class="discord-btn"
