@@ -21,643 +21,842 @@ content="width=device-width, initial-scale=1.0"
 
 <style>
 
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    html,
-    body {
-        margin: 0;
-        min-height: 100%;
-    }
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
 
-    body {
-        min-height: 100vh;
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(
+            circle at 70% 10%,
+            rgba(88,101,242,0.13),
+            transparent 30%
+        ),
+        #111214;
+    color: white;
+}
 
-        font-family: Arial, Helvetica, sans-serif;
+button,
+input,
+textarea {
+    font-family: inherit;
+}
 
-        background: #111214;
-        color: white;
-    }
+button {
+    cursor: pointer;
+}
 
 
-    /* =========================
-       SIDEBAR
-    ========================= */
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    position: fixed;
+
+    X: 0;
+    Y: 0;
+
+    width: 270px;
+    height: 100vh;
+
+    padding: 22px 14px;
+
+    background: rgba(24,25,28,0.98);
+
+    border-right:
+        1px solid rgba(255,255,255,0.06);
+
+    overflow-y: auto;
+
+    z-index: 10;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 8px 12px 25px;
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.brand img {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 10px;
+
+    object-fit: cover;
+
+    mix-blend-mode: screen;
+}
+
+.section-title {
+    margin:
+        18px 10px 8px;
+
+    color: #72767d;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+}
+
+.nav-item {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    margin-bottom: 4px;
+
+    border-radius: 9px;
+
+    color: #b5bac1;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s,
+        color 0.18s,
+        transform 0.18s;
+}
+
+.nav-item:hover {
+    background: #2b2d31;
+    color: white;
+}
+
+.nav-item.active {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(88,101,242,0.28),
+            rgba(88,101,242,0.10)
+        );
+
+    color: white;
+}
+
+
+/* =========================
+   ACCOUNT
+========================= */
+
+.account-box {
+    position: absolute;
+
+    X: 14px;
+    Y: auto;
+
+    bottom: 14px;
+
+    width: calc(100% - 28px);
+
+    padding: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    background: #202125;
+
+    border-radius: 10px;
+}
+
+.account-box img {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.account-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.account-name {
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.account-tag {
+    margin-top: 2px;
+
+    color: #72767d;
+
+    font-size: 11px;
+}
+
+.logout {
+    border: 0;
+    background: transparent;
+
+    color: #72767d;
+
+    font-size: 17px;
+}
+
+.logout:hover {
+    color: #ed4245;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.content {
+    margin-left: 270px;
+
+    min-height: 100vh;
+
+    padding: 42px;
+}
+
+.page {
+    display: none;
+
+    max-width: 1050px;
+
+    margin: 0 auto;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 800;
+
+    margin-bottom: 8px;
+}
+
+.page-description {
+    color: #b5bac1;
+
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    padding: 25px;
+
+    margin-bottom: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1e1f22,
+            #1b1c1f
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.055);
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 15px 35px rgba(0,0,0,0.15);
+}
+
+.card h2 {
+    margin:
+        0 0 8px;
+
+    font-size: 21px;
+}
+
+.card p {
+    color: #b5bac1;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-button {
+    border: 0;
+
+    padding: 12px 18px;
+
+    border-radius: 9px;
+
+    background: #5865f2;
+
+    color: white;
+
+    font-weight: 700;
+
+    transition: 0.18s;
+}
+
+.primary-button:hover {
+    background: #4752c4;
+
+    transform: translateY(-1px);
+}
+
+.secondary-button {
+    border:
+        1px solid rgba(255,255,255,0.09);
+
+    padding: 11px 17px;
+
+    border-radius: 9px;
+
+    background: #24262b;
+
+    color: white;
+
+    font-weight: 700;
+}
+
+.secondary-button:hover {
+    background: #2e3138;
+}
+
+
+/* =========================
+   BOT CARD
+========================= */
+
+.bot-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    padding: 17px;
+
+    margin-bottom: 12px;
+
+    background: #1e1f22;
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius: 13px;
+}
+
+.bot-avatar {
+    width: 62px;
+    height: 62px;
+
+    border-radius: 16px;
+
+    object-fit: cover;
+
+    background: #292b30;
+}
+
+.bot-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.bot-name {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.bot-id {
+    color: #72767d;
+
+    font-size: 12px;
+
+    margin-top: 4px;
+}
+
+.bot-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 8px;
+
+    font-size: 11px;
+
+    color: #8e9297;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #747f8d;
+}
+
+.status-dot.online {
+    background: #23a559;
+}
+
+.bot-actions {
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+
+/* =========================
+   ANNOUNCEMENTS
+========================= */
+
+.announcement {
+    padding: 22px;
+
+    margin-bottom: 15px;
+
+    background: #1e1f22;
+
+    border:
+        1px solid rgba(255,255,255,0.06);
+
+    border-radius: 14px;
+}
+
+.announcement-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 16px;
+}
+
+.announcement-header img {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.announcement-author {
+    font-weight: 800;
+}
+
+.announcement-username {
+    color: #72767d;
+
+    font-size: 12px;
+
+    margin-top: 3px;
+}
+
+.announcement-title {
+    font-size: 20px;
+
+    font-weight: 800;
+
+    margin-bottom: 9px;
+}
+
+.announcement-message {
+    color: #b5bac1;
+
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+}
+
+.announcement-time {
+    color: #72767d;
+
+    font-size: 11px;
+
+    margin-top: 17px;
+}
+
+.announcement-tools {
+    margin-top: 17px;
+
+    padding-top: 14px;
+
+    border-top:
+        1px solid rgba(255,255,255,0.05);
+
+    color: #72767d;
+
+    font-size: 11px;
+}
+
+.announcement-tools strong {
+    color: #aeb0b5;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-overlay {
+    position: fixed;
+
+    X: 0;
+    Y: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0,0,0,0.72);
+
+    backdrop-filter: blur(8px);
+
+    z-index: 100;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(600px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 27px;
+
+    background: #1e1f22;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.5);
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal label {
+    display: block;
+
+    margin:
+        16px 0 7px;
+
+    color: #b5bac1;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.modal input,
+.modal textarea {
+    width: 100%;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    outline: none;
+
+    border-radius: 9px;
+
+    background: #151619;
+
+    color: white;
+
+    padding: 12px;
+
+    font-size: 14px;
+}
+
+.modal textarea {
+    min-height: 130px;
+
+    resize: vertical;
+}
+
+.modal input:focus,
+.modal textarea:focus {
+    border-color: #5865f2;
+}
+
+.modal-buttons {
+    display: flex;
+
+    gap: 9px;
+
+    justify-content: flex-end;
+
+    margin-top: 20px;
+}
+
+.modal-message {
+    min-height: 18px;
+
+    margin-top: 12px;
+
+    color: #b5bac1;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   TUTORIAL
+========================= */
+
+.tutorial-progress {
+    display: flex;
+
+    gap: 5px;
+
+    margin:
+        18px 0 20px;
+}
+
+.progress-step {
+    flex: 1;
+
+    height: 5px;
+
+    border-radius: 10px;
+
+    background: #2b2d31;
+}
+
+.progress-step.complete {
+    background: #5865f2;
+}
+
+.tutorial-step {
+    display: none;
+}
+
+.tutorial-step.active {
+    display: block;
+}
+
+.tutorial-number {
+    color: #8f96ff;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+.tutorial-step h3 {
+    font-size: 21px;
+}
+
+.tutorial-step p {
+    color: #b5bac1;
+
+    line-height: 1.65;
+}
+
+.tutorial-warning {
+    padding: 13px;
+
+    border-radius: 9px;
+
+    background: rgba(237,66,69,0.09);
+
+    border:
+        1px solid rgba(237,66,69,0.2);
+
+    color: #f0a0a2;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+.token-area {
+    display: none;
+
+    margin-top: 20px;
+}
+
+.token-area.show {
+    display: block;
+}
+
+.token-input {
+    width: 100%;
+
+    padding: 13px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #151619;
+
+    color: white;
+}
+
+.token-input:focus {
+    border-color: #5865f2;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty {
+    padding: 45px 25px;
+
+    text-align: center;
+
+    background: #1e1f22;
+
+    border-radius: 15px;
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+}
+
+.empty-icon {
+    font-size: 42px;
+
+    margin-bottom: 10px;
+}
+
+.empty h2 {
+    margin-bottom: 8px;
+}
+
+.empty p {
+    color: #72767d;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
 
     .sidebar {
-        position: fixed;
-
-        width: 250px;
-        height: 100vh;
-
-        padding: 25px 15px;
-
-        background: #18191c;
-
-        border-right: 1px solid rgba(255,255,255,0.05);
-
-        overflow-y: auto;
+        width: 215px;
     }
-
-    .brand {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-
-        font-size: 24px;
-        font-weight: 800;
-
-        margin-bottom: 30px;
-        padding-left: 10px;
-    }
-
-    .brand-icon {
-        width: 32px;
-        height: 32px;
-
-        border-radius: 8px;
-
-        object-fit: cover;
-
-        mix-blend-mode: multiply;
-    }
-
-    .section-title {
-        color: #72767d;
-
-        font-size: 11px;
-        font-weight: 800;
-
-        margin: 20px 10px 8px;
-
-        letter-spacing: 1px;
-    }
-
-    .nav-item {
-        display: flex;
-        align-items: center;
-
-        width: 100%;
-
-        padding: 11px 12px;
-
-        border-radius: 7px;
-
-        color: #b5bac1;
-
-        margin-bottom: 4px;
-
-        cursor: pointer;
-
-        transition:
-            background 0.2s,
-            color 0.2s,
-            transform 0.15s;
-    }
-
-    .nav-item:hover {
-        background: #2b2d31;
-        color: white;
-        transform: translateX(2px);
-    }
-
-    .nav-item.active {
-        background: #5865f2;
-        color: white;
-    }
-
-
-    /* =========================
-       CONTENT
-    ========================= */
 
     .content {
-        margin-left: 250px;
-        padding: 45px;
+        margin-left: 215px;
 
-        min-height: 100vh;
-    }
-
-    .page {
-        display: none;
-
-        animation: pageIn 0.2s ease;
-    }
-
-    .page.active {
-        display: block;
-    }
-
-    @keyframes pageIn {
-
-        from {
-            opacity: 0;
-            transform: translateY(6px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-    }
-
-
-    /* =========================
-       HEADERS
-    ========================= */
-
-    .welcome {
-        font-size: 32px;
-        font-weight: 800;
-        margin-bottom: 10px;
+        padding: 25px;
     }
 
     .page-title {
-        font-size: 30px;
-        font-weight: 800;
-
-        margin-bottom: 8px;
+        font-size: 26px;
     }
 
-    .description {
-        color: #b5bac1;
-        margin-bottom: 30px;
+}
+
+@media (max-width: 600px) {
+
+    .sidebar {
+        width: 70px;
+
+        padding:
+            15px 8px;
     }
 
-
-    /* =========================
-       CARDS
-    ========================= */
-
-    .empty-card,
-    .card {
-        padding: 30px;
-
-        max-width: 800px;
-
-        background: #1e1f22;
-
-        border-radius: 14px;
-
-        border: 1px solid rgba(255,255,255,0.05);
-
-        margin-bottom: 20px;
-    }
-
-    .empty-card h2,
-    .card h2 {
-        margin-top: 0;
-    }
-
-    .empty-card p,
-    .card p {
-        color: #b5bac1;
-        line-height: 1.6;
-    }
-
-
-    /* =========================
-       BUTTONS
-    ========================= */
-
-    .add-button,
-    .primary-button,
-    .secondary-button,
-    .invite-button {
-
-        display: inline-flex;
-
-        align-items: center;
-        justify-content: center;
-
-        padding: 12px 18px;
-
-        border: none;
-
-        background: #5865f2;
-
-        color: white;
-
-        text-decoration: none;
-
-        border-radius: 8px;
-
-        font-weight: bold;
-
-        cursor: pointer;
-
-        transition:
-            background 0.2s,
-            transform 0.15s;
-    }
-
-    .add-button:hover,
-    .primary-button:hover,
-    .invite-button:hover {
-        background: #4752c4;
-        transform: translateY(-1px);
-    }
-
-    .secondary-button {
-        background: #2b2d31;
-        margin-left: 8px;
-    }
-
-    .secondary-button:hover {
-        background: #3a3d44;
-    }
-
-
-    /* =========================
-       BOT CARDS
-    ========================= */
-
-    .bot-list {
-        display: grid;
-
-        grid-template-columns:
-            repeat(auto-fill, minmax(280px, 1fr));
-
-        gap: 18px;
-
-        max-width: 1000px;
-    }
-
-    .bot-card {
-        background: #1e1f22;
-
-        border: 1px solid rgba(255,255,255,0.05);
-
-        border-radius: 14px;
-
-        padding: 20px;
-
-        transition:
-            transform 0.2s,
-            border-color 0.2s;
-    }
-
-    .bot-card:hover {
-        transform: translateY(-2px);
-
-        border-color:
-            rgba(88,101,242,0.4);
-    }
-
-    .bot-top {
-        display: flex;
-        align-items: center;
-
-        gap: 14px;
-
-        margin-bottom: 18px;
-    }
-
-    .bot-avatar {
-        width: 58px;
-        height: 58px;
-
-        border-radius: 14px;
-
-        object-fit: cover;
-
-        background: #2b2d31;
-    }
-
-    .bot-name {
-        font-size: 18px;
-        font-weight: 800;
-
-        margin-bottom: 5px;
-    }
-
-    .bot-id {
-        color: #72767d;
-
-        font-size: 12px;
-    }
-
-    .bot-status {
-        display: flex;
-        align-items: center;
-
-        gap: 7px;
-
-        font-size: 12px;
-
-        color: #b5bac1;
-
-        margin-bottom: 18px;
-    }
-
-    .status-dot {
-        width: 9px;
-        height: 9px;
-
-        border-radius: 50%;
-
-        background: #23a559;
-    }
-
-    .status-dot.offline {
-        background: #80848e;
-    }
-
-    .manage-button {
-        width: 100%;
-
-        padding: 10px;
-
-        border: none;
-
-        border-radius: 8px;
-
-        background: #2b2d31;
-
-        color: white;
-
-        font-weight: 700;
-
-        cursor: pointer;
-
-        transition: 0.2s;
-    }
-
-    .manage-button:hover {
-        background: #5865f2;
-    }
-
-
-    /* =========================
-       FORMS
-    ========================= */
-
-    .form-card {
-        max-width: 650px;
-
-        padding: 30px;
-
-        background: #1e1f22;
-
-        border-radius: 14px;
-
-        border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .form-label {
-        display: block;
-
-        margin-bottom: 8px;
-
-        color: #b5bac1;
-
-        font-size: 13px;
-
-        font-weight: 700;
-    }
-
-    .form-input,
-    .form-select {
-
-        width: 100%;
-
-        height: 48px;
-
-        padding: 0 14px;
-
-        margin-bottom: 18px;
-
-        border: 1px solid rgba(255,255,255,0.08);
-
-        border-radius: 8px;
-
-        outline: none;
-
-        background: #111214;
-
-        color: white;
-
-        font-size: 14px;
-    }
-
-    .form-input:focus,
-    .form-select:focus {
-        border-color: #5865f2;
-    }
-
-    .form-help {
-        color: #72767d;
-
-        font-size: 12px;
-
-        line-height: 1.5;
-
-        margin-top: -8px;
-
-        margin-bottom: 20px;
-    }
-
-    .message {
-        margin-top: 15px;
-
-        color: #b5bac1;
-
-        font-size: 13px;
-    }
-
-
-    /* =========================
-       ANNOUNCEMENTS
-    ========================= */
-
-    .announcement {
-        max-width: 850px;
-
-        padding: 25px;
-
-        background: #1e1f22;
-
-        border: 1px solid rgba(255,255,255,0.05);
-
-        border-radius: 14px;
-
-        margin-bottom: 18px;
-    }
-
-    .announcement-user {
-        display: flex;
-        align-items: center;
-
-        gap: 12px;
-
-        margin-bottom: 20px;
-    }
-
-    .announcement-avatar {
-        width: 45px;
-        height: 45px;
-
-        border-radius: 50%;
-
-        object-fit: cover;
-    }
-
-    .announcement-name {
-        font-weight: 800;
-    }
-
-    .announcement-username {
-        color: #72767d;
-
-        font-size: 12px;
-
-        margin-top: 3px;
-    }
-
-    .announcement h2 {
-        margin-bottom: 10px;
-
-        font-size: 20px;
-    }
-
-    .announcement p {
-        color: #b5bac1;
-
-        line-height: 1.7;
-    }
-
-    .built-with {
-        margin-top: 22px;
-
-        padding-top: 18px;
-
-        border-top:
-            1px solid rgba(255,255,255,0.06);
-    }
-
-    .built-with-title {
-        font-size: 12px;
-
-        color: #72767d;
-
-        font-weight: 800;
-
-        letter-spacing: 0.8px;
-
-        margin-bottom: 12px;
-    }
-
-    .tools {
-        display: flex;
-
-        flex-wrap: wrap;
-
-        gap: 8px;
-    }
-
-    .tool {
-        padding: 7px 10px;
-
-        background: #2b2d31;
-
-        border-radius: 7px;
-
-        color: #b5bac1;
-
-        font-size: 12px;
-    }
-
-    .tool a {
-        color: inherit;
-
-        text-decoration: none;
-    }
-
-    .tool:hover {
-        background: #363940;
-        color: white;
-    }
-
-
-    /* =========================
-       INVITE
-    ========================= */
-
-    .invite-card {
-        max-width: 650px;
-
-        padding: 30px;
-
-        background: #1e1f22;
-
-        border-radius: 14px;
-
-        border: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .invite-result {
-        margin-top: 20px;
-
-        padding: 15px;
-
-        background: #111214;
-
-        border-radius: 8px;
-
-        word-break: break-all;
-
-        color: #b5bac1;
-
-        font-size: 13px;
-
+    .brand span,
+    .section-title,
+    .nav-text,
+    .account-info,
+    .logout {
         display: none;
     }
 
-
-    /* =========================
-       EMPTY STATE
-    ========================= */
-
-    .no-bots {
-        padding: 30px;
-
-        max-width: 700px;
-
-        background: #1e1f22;
-
-        border-radius: 14px;
-
-        border: 1px solid rgba(255,255,255,0.05);
-
-        color: #b5bac1;
-
-        line-height: 1.6;
+    .brand {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
     }
 
+    .nav-item {
+        text-align: center;
 
-    /* =========================
-       MOBILE
-    ========================= */
-
-    @media (max-width: 700px) {
-
-        .sidebar {
-            width: 210px;
-        }
-
-        .content {
-            margin-left: 210px;
-            padding: 25px;
-        }
-
-        .welcome,
-        .page-title {
-            font-size: 26px;
-        }
-
+        padding:
+            13px 5px;
     }
+
+    .account-box {
+        justify-content: center;
+    }
+
+    .account-box img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .content {
+        margin-left: 70px;
+
+        padding: 20px 14px;
+    }
+
+    .bot-card {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .bot-actions {
+        width: 100%;
+    }
+}
 
 </style>
 
@@ -671,13 +870,11 @@ content="width=device-width, initial-scale=1.0"
 
 <aside class="sidebar">
 
-
+```
 <div class="brand">
 
     <img
-        class="brand-icon"
         src="https://img.icons8.com/nolan/1200/bot.jpg"
-        alt="Botzen"
     >
 
     <span>Botzen</span>
@@ -689,18 +886,20 @@ content="width=device-width, initial-scale=1.0"
     🌐 INFORMATION
 </div>
 
+
 <div
     class="nav-item active"
     data-page="home"
 >
-    🏠│Home
+    🏠 <span class="nav-text">│Home</span>
 </div>
+
 
 <div
     class="nav-item"
     data-page="announcements"
 >
-    📜│Announcements
+    📜 <span class="nav-text">│Announcements</span>
 </div>
 
 
@@ -708,18 +907,20 @@ content="width=device-width, initial-scale=1.0"
     🤖 BOT DIRECTORY
 </div>
 
+
 <div
     class="nav-item"
     data-page="my-bots"
 >
-    🤖│My Bots
+    🤖 <span class="nav-text">│My Bots</span>
 </div>
+
 
 <div
     class="nav-item"
     data-page="add-bot"
 >
-    ➕│Add Bot
+    ➕ <span class="nav-text">│Add Bot</span>
 </div>
 
 
@@ -727,461 +928,751 @@ content="width=device-width, initial-scale=1.0"
     🔗 CONNECTIONS
 </div>
 
+
 <div
     class="nav-item"
     data-page="invite"
 >
-    ✉️│Invite
+    ✉️ <span class="nav-text">│Invite</span>
 </div>
 
+
+<div class="account-box">
+
+    <img
+        id="accountAvatar"
+        src="https://cdn.discordapp.com/embed/avatars/0.png"
+    >
+
+    <div class="account-info">
+
+        <div
+            class="account-name"
+            id="accountName"
+        >
+            Loading...
+        </div>
+
+        <div
+            class="account-tag"
+            id="accountTag"
+        >
+            Botzen Account
+        </div>
+
+    </div>
+
+    <button
+        class="logout"
+        id="logoutButton"
+        title="Logout"
+    >
+        ↪
+    </button>
+
+</div>
+```
 
 </aside>
 
 <!-- =========================
-     MAIN CONTENT
+     CONTENT
 ========================= -->
 
 <main class="content">
 
-
 <!-- HOME -->
 
 <section
-    id="page-home"
     class="page active"
+    id="page-home"
 >
 
-    <div class="welcome">
-        Welcome to Botzen 👋
-    </div>
+```
+<div class="page-title">
+    Welcome to Botzen 👋
+</div>
 
-    <div class="description">
-        Your Discord account is connected successfully.
-    </div>
+<div class="page-description">
+    Manage your Discord bots from one powerful dashboard.
+</div>
 
 
-    <div id="homeContent"></div>
+<div id="homeBotArea"></div>
+
+
+<div class="card">
+
+    <h2>
+        🔐 Your Botzen Account
+    </h2>
+
+    <p>
+        Your account is connected to Botzen.
+        Your bots and announcements are stored online
+        using MongoDB.
+    </p>
+
+    <p id="accountDetails">
+        Loading account information...
+    </p>
+
+</div>
+```
 
 </section>
-
-
 
 <!-- ANNOUNCEMENTS -->
 
 <section
-    id="page-announcements"
     class="page"
+    id="page-announcements"
 >
 
-    <div class="page-title">
-        📜 Announcements
+```
+<div class="page-title">
+    📜 Announcements
+</div>
+
+<div class="page-description">
+    Latest Botzen updates and development news.
+</div>
+
+
+<div id="adminAnnouncementButton"></div>
+
+
+<div id="announcementList">
+
+    <div class="empty">
+        Loading announcements...
     </div>
 
-    <div class="description">
-        The latest updates and changes to Botzen.
-    </div>
-
-
-    <div class="announcement">
-
-        <div class="announcement-user">
-
-            <img
-                class="announcement-avatar"
-                src="https://files.catbox.moe/c0eqba.png"
-                alt="Ahmed"
-            >
-
-            <div>
-
-                <div class="announcement-name">
-                    𝑨𝒉𝒎𝒆𝒅
-                </div>
-
-                <div class="announcement-username">
-                    @ahmed123tou
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <h2>
-            🚀 Welcome to Botzen
-        </h2>
-
-        <p>
-            Botzen is a modern dashboard designed to make
-            managing Discord bots easier. This is the beginning
-            of the project, and more bot management features
-            will be added over time.
-        </p>
-
-
-        <div class="built-with">
-
-            <div class="built-with-title">
-                🛠️ WHAT I USED TO MAKE THIS
-            </div>
-
-
-            <div class="tools">
-
-                <div class="tool">
-                    GitHub
-                </div>
-
-                <div class="tool">
-                    Render
-                </div>
-
-                <div class="tool">
-                    ChatGPT
-                </div>
-
-                <div class="tool">
-                    Gemini
-                </div>
-
-                <div class="tool">
-                    HTML
-                </div>
-
-                <div class="tool">
-                    CSS
-                </div>
-
-                <div class="tool">
-                    JavaScript
-                </div>
-
-                <div class="tool">
-                    <a
-                        href="https://static.app/html-test"
-                        target="_blank"
-                    >
-                        HTML Tester
-                    </a>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
+```
 
 </section>
-
-
 
 <!-- MY BOTS -->
 
 <section
-    id="page-my-bots"
     class="page"
+    id="page-my-bots"
 >
 
-    <div class="page-title">
-        🤖 My Bots
-    </div>
+```
+<div class="page-title">
+    🤖 My Bots
+</div>
 
-    <div class="description">
-        View and manage all bots connected to your Botzen account.
-    </div>
+<div class="page-description">
+    View and manage all Discord bots connected to your account.
+</div>
 
 
-    <div id="myBotsContent"></div>
+<div id="botList"></div>
+```
 
 </section>
-
-
 
 <!-- ADD BOT -->
 
 <section
-    id="page-add-bot"
     class="page"
+    id="page-add-bot"
 >
 
-    <div class="page-title">
-        ➕ Add a Bot
-    </div>
+```
+<div class="page-title">
+    ➕ Add a Bot
+</div>
 
-    <div class="description">
-        Connect a Discord bot to your Botzen dashboard.
-    </div>
-
-
-    <div class="form-card">
-
-        <h2>
-            Add Bot
-        </h2>
-
-        <p>
-            Enter the bot information below.
-        </p>
+<div class="page-description">
+    Connect your Discord bot to Botzen.
+</div>
 
 
-        <form id="addBotForm">
+<div class="card">
 
-            <label
-                class="form-label"
-                for="botName"
-            >
-                Bot Name
-            </label>
+    <h2>
+        Before we begin
+    </h2>
 
-            <input
-                id="botName"
-                class="form-input"
-                type="text"
-                placeholder="Example: Echo"
-                required
-            >
+    <p>
+        Follow the setup tutorial first.
+        Botzen will only allow you to enter your bot token
+        after every required step has been completed.
+    </p>
 
 
-            <label
-                class="form-label"
-                for="botId"
-            >
-                Bot ID
-            </label>
+    <button
+        class="primary-button"
+        id="startTutorialButton"
+    >
+        Start Bot Setup
+    </button>
 
-            <input
-                id="botId"
-                class="form-input"
-                type="text"
-                placeholder="Discord Bot ID"
-                required
-            >
-
-
-            <label
-                class="form-label"
-                for="botKey"
-            >
-                Bot Key
-            </label>
-
-            <input
-                id="botKey"
-                class="form-input"
-                type="text"
-                placeholder="Enter your Botzen bot key"
-                required
-            >
-
-            <div class="form-help">
-                Your bot key is used to identify the bot you want
-                to connect to Botzen. Never put a Discord bot token
-                into this field.
-            </div>
-
-
-            <button
-                class="primary-button"
-                type="submit"
-            >
-                ➕ Add Bot
-            </button>
-
-        </form>
-
-
-        <div
-            id="addBotMessage"
-            class="message"
-        ></div>
-
-    </div>
+</div>
+```
 
 </section>
-
-
 
 <!-- INVITE -->
 
 <section
-    id="page-invite"
     class="page"
+    id="page-invite"
 >
 
-    <div class="page-title">
-        ✉️ Invite
-    </div>
+```
+<div class="page-title">
+    ✉️ Invite
+</div>
 
-    <div class="description">
-        Invite one of your Discord bots to a server.
-    </div>
-
-
-    <div class="invite-card">
-
-        <h2>
-            Invite a Bot
-        </h2>
-
-        <p>
-            Select a bot below to generate its Discord invite.
-        </p>
+<div class="page-description">
+    Select one of your bots and invite it to a Discord server.
+</div>
 
 
-        <label
-            class="form-label"
-            for="inviteBot"
-        >
-            Select Bot
-        </label>
-
-        <select
-            id="inviteBot"
-            class="form-select"
-        ></select>
-
-
-        <button
-            id="generateInvite"
-            class="invite-button"
-            type="button"
-        >
-            🔗 Generate Invite
-        </button>
-
-
-        <div
-            id="inviteResult"
-            class="invite-result"
-        ></div>
-
-    </div>
+<div id="inviteList"></div>
+```
 
 </section>
 
-
 </main>
+
+<!-- =========================
+     ANNOUNCEMENT MODAL
+========================= -->
+
+<div
+    class="modal-overlay"
+    id="announcementModal"
+>
+
+```
+<div class="modal">
+
+    <h2>
+        📢 Create Announcement
+    </h2>
+
+    <p>
+        Your admin key is required every time you publish
+        an announcement.
+    </p>
+
+
+    <label>
+        Admin Key
+    </label>
+
+    <input
+        type="password"
+        id="adminKey"
+        placeholder="Enter admin key"
+        autocomplete="off"
+    >
+
+
+    <label>
+        Announcement Title
+    </label>
+
+    <input
+        type="text"
+        id="announcementTitle"
+        maxlength="150"
+        placeholder="Example: Botzen v1.1 released"
+    >
+
+
+    <label>
+        Announcement
+    </label>
+
+    <textarea
+        id="announcementMessage"
+        maxlength="5000"
+        placeholder="Write your announcement..."
+    ></textarea>
+
+
+    <div
+        class="modal-message"
+        id="announcementMessageBox"
+    ></div>
+
+
+    <div class="modal-buttons">
+
+        <button
+            class="secondary-button"
+            id="closeAnnouncementButton"
+        >
+            Cancel
+        </button>
+
+        <button
+            class="primary-button"
+            id="publishAnnouncementButton"
+        >
+            Publish
+        </button>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- =========================
+     BOT TUTORIAL MODAL
+========================= -->
+
+<div
+    class="modal-overlay"
+    id="tutorialModal"
+>
+
+```
+<div class="modal">
+
+    <h2>
+        🤖 Botzen Bot Setup
+    </h2>
+
+    <div
+        class="tutorial-progress"
+        id="tutorialProgress"
+    ></div>
+
+
+    <div
+        class="tutorial-step active"
+        data-step="0"
+    >
+
+        <div class="tutorial-number">
+            STEP 1 / 5
+        </div>
+
+        <h3>
+            Open Discord Developer Portal
+        </h3>
+
+        <p>
+            Open the Discord Developer Portal and select
+            the application containing your bot.
+        </p>
+
+        <button
+            class="primary-button"
+            onclick="window.open('https://discord.com/developers/applications','_blank')"
+        >
+            Open Developer Portal
+        </button>
+
+    </div>
+
+
+    <div
+        class="tutorial-step"
+        data-step="1"
+    >
+
+        <div class="tutorial-number">
+            STEP 2 / 5
+        </div>
+
+        <h3>
+            Open the Bot section
+        </h3>
+
+        <p>
+            Inside your application, select
+            <strong>Bot</strong> from the menu.
+        </p>
+
+        <p>
+            Make sure your application actually has a Discord bot.
+        </p>
+
+    </div>
+
+
+    <div
+        class="tutorial-step"
+        data-step="2"
+    >
+
+        <div class="tutorial-number">
+            STEP 3 / 5
+        </div>
+
+        <h3>
+            Enable the required intents
+        </h3>
+
+        <p>
+            In the Bot page, enable the intents your bot
+            requires for the features you plan to use.
+        </p>
+
+        <p>
+            Botzen can add more required intents later as
+            dashboard features are implemented.
+        </p>
+
+    </div>
+
+
+    <div
+        class="tutorial-step"
+        data-step="3"
+    >
+
+        <div class="tutorial-number">
+            STEP 4 / 5
+        </div>
+
+        <h3>
+            Copy your bot token
+        </h3>
+
+        <p>
+            In the Bot section, use the token controls to
+            copy the bot token.
+        </p>
+
+        <div class="tutorial-warning">
+
+            ⚠️ Never post your bot token in Discord,
+            GitHub, screenshots, or public websites.
+            If somebody gets the token, regenerate it
+            immediately in the Discord Developer Portal.
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="tutorial-step"
+        data-step="4"
+    >
+
+        <div class="tutorial-number">
+            STEP 5 / 5
+        </div>
+
+        <h3>
+            Bot token
+        </h3>
+
+        <p>
+            You completed the tutorial.
+            You can now securely send the token to Botzen.
+        </p>
+
+
+        <div
+            class="token-area"
+            id="tokenArea"
+        >
+
+            <input
+                class="token-input"
+                type="password"
+                id="botToken"
+                placeholder="Paste your Discord bot token"
+                autocomplete="off"
+            >
+
+            <p class="tutorial-warning">
+
+                🔒 The token is sent directly to the Botzen
+                backend for validation. It is never saved
+                in browser localStorage.
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="modal-message"
+        id="tutorialMessage"
+    ></div>
+
+
+    <div class="modal-buttons">
+
+        <button
+            class="secondary-button"
+            id="tutorialCancel"
+        >
+            Cancel
+        </button>
+
+        <button
+            class="secondary-button"
+            id="tutorialBack"
+        >
+            Back
+        </button>
+
+        <button
+            class="primary-button"
+            id="tutorialNext"
+        >
+            Next
+        </button>
+
+    </div>
+
+</div>
+```
+
+</div>
 
 <script>
 
-
 /* =========================
-   BOTZEN BOT STORAGE
+   BOTZEN
 ========================= */
 
-const BOT_STORAGE_KEY =
-    "BOTZEN_BOTS";
-
-
-let bots =
-    JSON.parse(
-        localStorage.getItem(BOT_STORAGE_KEY) || "[]"
-    );
+const API = "";
 
 
 /* =========================
-   PAGE NAVIGATION
+   ACCOUNT
+========================= */
+
+let currentUser = null;
+
+let currentBots = [];
+
+
+/* =========================
+   NAVIGATION
 ========================= */
 
 const navItems =
-    document.querySelectorAll(".nav-item");
+    document.querySelectorAll(
+        ".nav-item"
+    );
 
 const pages =
-    document.querySelectorAll(".page");
+    document.querySelectorAll(
+        ".page"
+    );
 
 
 function showPage(pageName) {
 
-    pages.forEach(function(page) {
-
-        page.classList.remove("active");
-
-    });
-
-
-    const selectedPage =
-        document.getElementById(
-            "page-" + pageName
-        );
-
-
-    if (selectedPage) {
-
-        selectedPage.classList.add("active");
-
-    }
-
-
     navItems.forEach(function(item) {
 
-        item.classList.remove("active");
+        item.classList.toggle(
+            "active",
+            item.dataset.page === pageName
+        );
 
     });
 
 
-    const selectedNav =
-        document.querySelector(
-            '.nav-item[data-page="' +
-            pageName +
-            '"]'
+    pages.forEach(function(page) {
+
+        page.classList.toggle(
+            "active",
+            page.id ===
+            "page-" +
+            pageName
         );
 
-
-    if (selectedNav) {
-
-        selectedNav.classList.add("active");
-
-    }
+    });
 
 
     if (pageName === "home") {
-
-        renderHome();
-
+        loadHome();
     }
 
+    if (pageName === "announcements") {
+        loadAnnouncements();
+    }
 
     if (pageName === "my-bots") {
-
-        renderMyBots();
-
+        loadBots();
     }
-
 
     if (pageName === "invite") {
-
-        renderInviteBots();
-
+        loadInvite();
     }
-
 }
 
 
 navItems.forEach(function(item) {
 
-    item.addEventListener("click", function() {
+    item.addEventListener(
+        "click",
+        function() {
 
-        const pageName =
-            item.dataset.page;
+            showPage(
+                item.dataset.page
+            );
 
-        showPage(pageName);
-
-    });
-
+        }
+    );
 });
 
 
 /* =========================
-   SAVE BOTS
+   ACCOUNT
 ========================= */
 
-function saveBots() {
+async function loadAccount() {
 
-    localStorage.setItem(
-        BOT_STORAGE_KEY,
-        JSON.stringify(bots)
-    );
+    try {
 
+        const response =
+            await fetch(
+                API + "/api/me",
+                {
+                    credentials: "include"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            window.location.href = "/";
+
+            return;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.authenticated) {
+
+            window.location.href = "/";
+
+            return;
+        }
+
+
+        currentUser =
+            data.user;
+
+
+        document.getElementById(
+            "accountName"
+        ).textContent =
+            currentUser.displayName ||
+            currentUser.username ||
+            currentUser.discordUsername ||
+            "Botzen User";
+
+
+        document.getElementById(
+            "accountTag"
+        ).textContent =
+            currentUser.discordUsername
+                ? "@" +
+                  currentUser.discordUsername
+                : "Botzen Account";
+
+
+        if (currentUser.avatar) {
+
+            document.getElementById(
+                "accountAvatar"
+            ).src =
+                currentUser.avatar;
+        }
+
+
+        document.getElementById(
+            "accountDetails"
+        ).textContent =
+            "Discord ID: " +
+            (
+                currentUser.discordId ||
+                "Not connected"
+            );
+
+
+        setupAdminUI();
+
+    } catch (error) {
+
+        console.error(
+            "Account error:",
+            error
+        );
+
+        window.location.href = "/";
+
+    }
+}
+
+
+/* =========================
+   ADMIN UI
+========================= */
+
+function setupAdminUI() {
+
+    const area =
+        document.getElementById(
+            "adminAnnouncementButton"
+        );
+
+
+    if (
+        currentUser &&
+        currentUser.role === "admin"
+    ) {
+
+        area.innerHTML =
+
+            '<div class="card">' +
+
+                '<h2>👑 Admin</h2>' +
+
+                '<p>' +
+                    'You can publish a Botzen announcement. ' +
+                    'The admin key is required every time.' +
+                '</p>' +
+
+                '<button ' +
+                    'class="primary-button" ' +
+                    'id="openAnnouncementButton"' +
+                '>' +
+                    '📢 Create Announcement' +
+                '</button>' +
+
+            '</div>';
+
+
+        document
+            .getElementById(
+                "openAnnouncementButton"
+            )
+            .addEventListener(
+                "click",
+                openAnnouncementModal
+            );
+
+    } else {
+
+        area.innerHTML = "";
+    }
 }
 
 
@@ -1189,468 +1680,1109 @@ function saveBots() {
    HOME
 ========================= */
 
-function renderHome() {
+async function loadHome() {
 
-    const container =
-        document.getElementById("homeContent");
+    await loadBots();
+
+    const area =
+        document.getElementById(
+            "homeBotArea"
+        );
 
 
-    if (bots.length === 0) {
+    if (!currentBots.length) {
 
-        container.innerHTML = 
+        area.innerHTML =
 
-            <div class="empty-card">
+            '<div class="empty">' +
 
-                <h2>
-                    🤖 Your Bots
-                </h2>
+                '<div class="empty-icon">🤖</div>' +
 
-                <p>
-                    You don't have any bots connected to
-                    Botzen yet.
-                </p>
+                '<h2>No bots yet</h2>' +
 
-                <p>
-                    Add your first Discord bot to start
-                    managing it from your Botzen dashboard.
-                </p>
+                '<p>' +
+                    'Add your first Discord bot to Botzen.' +
+                '</p>' +
 
-                <button
-                    class="add-button"
-                    onclick="showPage('add-bot')"
-                >
-                    ➕ Add a Bot
-                </button>
+                '<button ' +
+                    'class="primary-button" ' +
+                    'onclick="showPage(\\'add-bot\\')"' +
+                '>' +
+                    '➕ Add a Bot' +
+                '</button>' +
 
-            </div>
-
-        ;
+            '</div>';
 
         return;
-
     }
 
-
-    container.innerHTML = 
-
-        <div class="bot-list">
-
-            ${bots.map(function(bot) {
-
-                return createBotCard(bot);
-
-            }).join("")}
-
-        </div>
-
-    ;
-
-}
-
-
-/* =========================
-   BOT CARD
-========================= */
-
-function createBotCard(bot) {
-
-    return 
-
-        <div class="bot-card">
-
-            <div class="bot-top">
-
-                <img
-                    class="bot-avatar"
-                    src="${escapeHTML(bot.avatar)}"
-                    alt="${escapeHTML(bot.name)}"
-                    onerror="this.src='https://img.icons8.com/nolan/1200/bot.jpg'"
-                >
-
-                <div>
-
-                    <div class="bot-name">
-                        ${escapeHTML(bot.name)}
-                    </div>
-
-                    <div class="bot-id">
-                        ID: ${escapeHTML(bot.id)}
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="bot-status">
-
-                <span
-                    class="status-dot ${
-                        bot.online ? "" : "offline"
-                    }"
-                ></span>
-
-                ${
-                    bot.online
-                        ? "Online"
-                        : "Offline"
-                }
-
-            </div>
-
-
-            <button
-                class="manage-button"
-                onclick="manageBot('${escapeHTML(bot.id)}')"
-            >
-                ⚙️ Manage
-            </button>
-
-        </div>
-
-    ;
-
-}
-
-
-/* =========================
-   MY BOTS
-========================= */
-
-function renderMyBots() {
-
-    const container =
-        document.getElementById("myBotsContent");
-
-
-    if (bots.length === 0) {
-
-        container.innerHTML = 
-
-            <div class="no-bots">
-
-                <h2>
-                    🤖 No Bots Yet
-                </h2>
-
-                <p>
-                    You haven't added any bots to Botzen.
-                </p>
-
-                <button
-                    class="add-button"
-                    onclick="showPage('add-bot')"
-                >
-                    ➕ Add Your First Bot
-                </button>
-
-            </div>
-
-        ;
-
-        return;
-
-    }
-
-
-    container.innerHTML = 
-
-        <div class="bot-list">
-
-            ${bots.map(function(bot) {
-
-                return createBotCard(bot);
-
-            }).join("")}
-
-        </div>
-
-    ;
-
-}
-
-
-/* =========================
-   MANAGE BOT
-========================= */
-
-function manageBot(botId) {
 
     const bot =
-        bots.find(function(item) {
-
-            return item.id === botId;
-
-        });
+        currentBots[0];
 
 
-    if (!bot) {
-
-        return;
-
-    }
-
-
-    alert(
-        "Botzen Bot Manager\\n\\n" +
-        "Bot: " + bot.name + "\\n" +
-        "ID: " + bot.id + "\\n\\n" +
-        "The full bot management panel will be added next."
-    );
-
+    area.innerHTML =
+        createBotCard(
+            bot,
+            true
+        );
 }
 
 
 /* =========================
-   ADD BOT
+   BOTS
 ========================= */
 
-const addBotForm =
-    document.getElementById("addBotForm");
+async function loadBots() {
 
+    try {
 
-addBotForm.addEventListener(
-    "submit",
-    function(event) {
-
-        event.preventDefault();
-
-
-        const name =
-            document.getElementById("botName")
-                .value
-                .trim();
-
-
-        const id =
-            document.getElementById("botId")
-                .value
-                .trim();
-
-
-        const key =
-            document.getElementById("botKey")
-                .value
-                .trim();
-
-
-        const message =
-            document.getElementById(
-                "addBotMessage"
+        const response =
+            await fetch(
+                API + "/api/bots",
+                {
+                    credentials: "include"
+                }
             );
 
 
-        if (bots.some(function(bot) {
-
-            return bot.id === id;
-
-        })) {
-
-            message.textContent =
-                "❌ A bot with this ID is already added.";
+        if (!response.ok) {
 
             return;
-
         }
 
 
-        const newBot = {
-
-            name: name,
-
-            id: id,
-
-            key: key,
-
-            avatar:
-                "https://img.icons8.com/nolan/1200/bot.jpg",
-
-            online: false
-
-        };
+        const data =
+            await response.json();
 
 
-        bots.push(newBot);
-
-        saveBots();
-
-
-        message.textContent =
-            "✅ Bot added successfully!";
+        currentBots =
+            data.bots || [];
 
 
-        addBotForm.reset();
+        renderBots();
 
+    } catch (error) {
 
-        setTimeout(function() {
-
-            message.textContent = "";
-
-            showPage("my-bots");
-
-        }, 700);
-
+        console.error(
+            "Bot load error:",
+            error
+        );
     }
-);
+}
+
+
+function createBotCard(
+    bot,
+    home = false
+) {
+
+    const avatar =
+        bot.avatar ||
+        "https://cdn.discordapp.com/embed/avatars/0.png";
+
+
+    return (
+
+        '<div class="bot-card">' +
+
+            '<img ' +
+                'class="bot-avatar" ' +
+                'src="' +
+                    avatar +
+                '"' +
+            '>' +
+
+            '<div class="bot-details">' +
+
+                '<div class="bot-name">' +
+                    escapeHTML(
+                        bot.name ||
+                        bot.username
+                    ) +
+                '</div>' +
+
+                '<div class="bot-id">' +
+                    'ID: ' +
+                    escapeHTML(
+                        bot.botId
+                    ) +
+                '</div>' +
+
+                '<div class="bot-status">' +
+
+                    '<span class="status-dot ' +
+                        (
+                            bot.online
+                                ? "online"
+                                : ""
+                        ) +
+                    '"></span>' +
+
+                    (
+                        bot.online
+                            ? "Online"
+                            : "Offline"
+                    ) +
+
+                '</div>' +
+
+            '</div>' +
+
+            '<div class="bot-actions">' +
+
+                (
+                    home
+                        ? '<button class="secondary-button" onclick="showPage(\\'my-bots\\')">Manage</button>'
+                        : ''
+                ) +
+
+                '<button ' +
+                    'class="secondary-button" ' +
+                    'onclick="inviteBot(\\'' +
+                        bot.id +
+                    '\\')"' +
+                '>' +
+                    'Invite' +
+                '</button>' +
+
+                '<button ' +
+                    'class="secondary-button" ' +
+                    'onclick="toggleBotLock(\\'' +
+                        bot.id +
+                    '\\')"' +
+                '>' +
+                    (
+                        bot.locked
+                            ? "Unlock Key"
+                            : "Lock Key"
+                    ) +
+                '</button>' +
+
+            '</div>' +
+
+        '</div>'
+    );
+}
+
+
+function renderBots() {
+
+    const list =
+        document.getElementById(
+            "botList"
+        );
+
+
+    if (!currentBots.length) {
+
+        list.innerHTML =
+
+            '<div class="empty">' +
+
+                '<div class="empty-icon">🤖</div>' +
+
+                '<h2>No bots connected</h2>' +
+
+                '<p>' +
+                    'Add a Discord bot to get started.' +
+                '</p>' +
+
+                '<button ' +
+                    'class="primary-button" ' +
+                    'onclick="showPage(\\'add-bot\\')"' +
+                '>' +
+                    '➕ Add Bot' +
+                '</button>' +
+
+            '</div>';
+
+        return;
+    }
+
+
+    list.innerHTML =
+        currentBots
+            .map(function(bot) {
+                return createBotCard(bot);
+            })
+            .join("");
+}
+
+
+/* =========================
+   LOCK BOT KEY
+========================= */
+
+async function toggleBotLock(id) {
+
+    try {
+
+        const response =
+            await fetch(
+                API +
+                "/api/bots/" +
+                encodeURIComponent(id) +
+                "/lock",
+                {
+                    method: "POST",
+                    credentials: "include"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.message ||
+                "Could not change bot lock."
+            );
+
+            return;
+        }
+
+
+        await loadBots();
+
+        alert(
+            data.locked
+                ? "Bot key locked."
+                : "Bot key unlocked."
+        );
+
+    } catch (error) {
+
+        alert(
+            "Could not connect to Botzen."
+        );
+    }
+}
 
 
 /* =========================
    INVITE
 ========================= */
 
-function renderInviteBots() {
+function inviteBot(id) {
 
-    const select =
-        document.getElementById("inviteBot");
+    window.open(
+        "/api/bots/" +
+        encodeURIComponent(id) +
+        "/invite",
+        "_blank"
+    );
+}
 
 
-    select.innerHTML = "";
+function loadInvite() {
+
+    const list =
+        document.getElementById(
+            "inviteList"
+        );
 
 
-    if (bots.length === 0) {
+    if (!currentBots.length) {
 
-        select.innerHTML = 
+        list.innerHTML =
 
-            <option value="">
-                No bots available
-            </option>
+            '<div class="empty">' +
 
-        ;
+                '<div class="empty-icon">✉️</div>' +
+
+                '<h2>No bots available</h2>' +
+
+                '<p>' +
+                    'Add a bot first, then you can invite it.' +
+                '</p>' +
+
+                '<button ' +
+                    'class="primary-button" ' +
+                    'onclick="showPage(\\'add-bot\\')"' +
+                '>' +
+                    '➕ Add Bot' +
+                '</button>' +
+
+            '</div>';
 
         return;
-
     }
 
 
-    bots.forEach(function(bot) {
+    list.innerHTML =
+        currentBots
+            .map(function(bot) {
 
-        const option =
-            document.createElement("option");
+                return (
+
+                    '<div class="bot-card">' +
+
+                        '<img ' +
+                            'class="bot-avatar" ' +
+                            'src="' +
+                                (
+                                    bot.avatar ||
+                                    "https://cdn.discordapp.com/embed/avatars/0.png"
+                                ) +
+                            '"' +
+                        '>' +
+
+                        '<div class="bot-details">' +
+
+                            '<div class="bot-name">' +
+                                escapeHTML(
+                                    bot.name
+                                ) +
+                            '</div>' +
+
+                            '<div class="bot-id">' +
+                                'ID: ' +
+                                escapeHTML(
+                                    bot.botId
+                                ) +
+                            '</div>' +
+
+                        '</div>' +
+
+                        '<button ' +
+                            'class="primary-button" ' +
+                            'onclick="inviteBot(\\'' +
+                                bot.id +
+                            '\\')"' +
+                        '>' +
+                            '🔗 Invite' +
+                        '</button>' +
+
+                    '</div>'
+                );
+            })
+            .join("");
+}
 
 
-        option.value =
-            bot.id;
+/* =========================
+   ANNOUNCEMENTS
+========================= */
+
+async function loadAnnouncements() {
+
+    const list =
+        document.getElementById(
+            "announcementList"
+        );
 
 
-        option.textContent =
-            bot.name +
-            " — " +
-            bot.id;
+    try {
+
+        const response =
+            await fetch(
+                API +
+                "/api/announcements"
+            );
 
 
-        select.appendChild(option);
+        const data =
+            await response.json();
 
-    });
 
+        if (
+            !data.announcements ||
+            !data.announcements.length
+        ) {
+
+            list.innerHTML =
+
+                '<div class="empty">' +
+
+                    '<div class="empty-icon">📜</div>' +
+
+                    '<h2>No announcements yet</h2>' +
+
+                    '<p>' +
+                        'Botzen updates will appear here.' +
+                    '</p>' +
+
+                '</div>';
+
+            return;
+        }
+
+
+        list.innerHTML =
+            data.announcements
+                .map(
+                    createAnnouncement
+                )
+                .join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "Announcement error:",
+            error
+        );
+
+        list.innerHTML =
+            '<div class="empty">' +
+                'Could not load announcements.' +
+            '</div>';
+    }
+}
+
+
+function createAnnouncement(item) {
+
+    const date =
+        item.createdAt
+            ? new Date(
+                item.createdAt
+              ).toLocaleString()
+            : "";
+
+
+    return (
+
+        '<article class="announcement">' +
+
+            '<div class="announcement-header">' +
+
+                '<img ' +
+                    'src="' +
+                        (
+                            item.author.avatar ||
+                            "https://cdn.discordapp.com/embed/avatars/0.png"
+                        ) +
+                    '"' +
+                '>' +
+
+                '<div>' +
+
+                    '<div class="announcement-author">' +
+                        escapeHTML(
+                            item.author.displayName
+                        ) +
+                    '</div>' +
+
+                    '<div class="announcement-username">' +
+                        '@' +
+                        escapeHTML(
+                            item.author.username
+                        ) +
+                    '</div>' +
+
+                '</div>' +
+
+            '</div>' +
+
+
+            '<div class="announcement-title">' +
+                escapeHTML(
+                    item.title
+                ) +
+            '</div>' +
+
+
+            '<div class="announcement-message">' +
+                escapeHTML(
+                    item.message
+                ) +
+            '</div>' +
+
+
+            '<div class="announcement-time">' +
+                date +
+            '</div>' +
+
+
+            '<div class="announcement-tools">' +
+
+                '<strong>Built with:</strong> ' +
+
+                'GitHub · Render · ChatGPT · Gemini · HTML Tester' +
+
+            '</div>' +
+
+        '</article>'
+    );
+}
+
+
+/* =========================
+   ANNOUNCEMENT MODAL
+========================= */
+
+function openAnnouncementModal() {
+
+    document
+        .getElementById(
+            "announcementModal"
+        )
+        .classList.add("show");
+
+    document
+        .getElementById(
+            "announcementMessageBox"
+        )
+        .textContent = "";
+
+    document
+        .getElementById(
+            "adminKey"
+        )
+        .value = "";
 }
 
 
 document
-    .getElementById("generateInvite")
+    .getElementById(
+        "closeAnnouncementButton"
+    )
     .addEventListener(
         "click",
         function() {
 
-            const botId =
-                document.getElementById(
-                    "inviteBot"
-                ).value;
+            document
+                .getElementById(
+                    "announcementModal"
+                )
+                .classList.remove("show");
+        }
+    );
 
 
-            const result =
-                document.getElementById(
-                    "inviteResult"
+document
+    .getElementById(
+        "publishAnnouncementButton"
+    )
+    .addEventListener(
+        "click",
+        async function() {
+
+            const adminKey =
+                document
+                    .getElementById(
+                        "adminKey"
+                    )
+                    .value;
+
+            const title =
+                document
+                    .getElementById(
+                        "announcementTitle"
+                    )
+                    .value
+                    .trim();
+
+            const message =
+                document
+                    .getElementById(
+                        "announcementMessage"
+                    )
+                    .value
+                    .trim();
+
+            const box =
+                document
+                    .getElementById(
+                        "announcementMessageBox"
+                    );
+
+
+            if (!adminKey) {
+
+                box.textContent =
+                    "Enter the admin key.";
+
+                return;
+            }
+
+
+            if (!title || !message) {
+
+                box.textContent =
+                    "Enter a title and announcement.";
+
+                return;
+            }
+
+
+            box.textContent =
+                "Publishing...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API +
+                        "/api/announcements",
+                        {
+
+                            method: "POST",
+
+                            credentials: "include",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    adminKey,
+
+                                    title,
+
+                                    message
+                                })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    box.textContent =
+                        data.message ||
+                        "Announcement failed.";
+
+                    return;
+                }
+
+
+                box.textContent =
+                    "Announcement published!";
+
+
+                document
+                    .getElementById(
+                        "adminKey"
+                    )
+                    .value = "";
+
+                document
+                    .getElementById(
+                        "announcementTitle"
+                    )
+                    .value = "";
+
+                document
+                    .getElementById(
+                        "announcementMessage"
+                    )
+                    .value = "";
+
+
+                setTimeout(
+                    function() {
+
+                        document
+                            .getElementById(
+                                "announcementModal"
+                            )
+                            .classList.remove(
+                                "show"
+                            );
+
+                        loadAnnouncements();
+
+                    },
+                    600
                 );
 
 
-            if (!botId) {
+            } catch (error) {
 
-                result.style.display =
-                    "block";
+                console.error(error);
 
-                result.textContent =
-                    "❌ You need to add a bot first.";
-
-                return;
-
+                box.textContent =
+                    "Could not connect to Botzen.";
             }
-
-
-            const bot =
-                bots.find(function(item) {
-
-                    return item.id === botId;
-
-                });
-
-
-            if (!bot) {
-
-                return;
-
-            }
-
-
-            const inviteURL =
-                "https://discord.com/oauth2/authorize" +
-                "?client_id=" +
-                encodeURIComponent(bot.id) +
-                "&permissions=8" +
-                "&scope=bot%20applications.commands";
-
-
-            result.style.display =
-                "block";
-
-
-            result.innerHTML = 
-
-                <strong>
-                    Your Discord invite:
-                </strong>
-
-                <br><br>
-
-                <a
-                    href="${inviteURL}"
-                    target="_blank"
-                    style="color:#8f96ff;"
-                >
-                    ${inviteURL}
-                </a>
-
-            ;
-
         }
     );
 
 
 /* =========================
-   HTML SAFETY
+   BOT TUTORIAL
+========================= */
+
+let tutorialStep = 0;
+
+const totalTutorialSteps = 5;
+
+
+function updateTutorial() {
+
+    const steps =
+        document.querySelectorAll(
+            ".tutorial-step"
+        );
+
+
+    steps.forEach(function(step) {
+
+        step.classList.toggle(
+            "active",
+            Number(
+                step.dataset.step
+            ) === tutorialStep
+        );
+
+    });
+
+
+    const progress =
+        document.getElementById(
+            "tutorialProgress"
+        );
+
+
+    progress.innerHTML = "";
+
+
+    for (
+        let i = 0;
+        i < totalTutorialSteps;
+        i++
+    ) {
+
+        const item =
+            document.createElement(
+                "div"
+            );
+
+        item.className =
+            "progress-step" +
+            (
+                i <= tutorialStep
+                    ? " complete"
+                    : ""
+            );
+
+        progress.appendChild(
+            item
+        );
+    }
+
+
+    const back =
+        document.getElementById(
+            "tutorialBack"
+        );
+
+    const next =
+        document.getElementById(
+            "tutorialNext"
+        );
+
+
+    back.style.display =
+        tutorialStep === 0
+            ? "none"
+            : "block";
+
+
+    next.textContent =
+        tutorialStep ===
+        totalTutorialSteps - 1
+            ? "Add Bot"
+            : "Next";
+
+
+    document
+        .getElementById(
+            "tokenArea"
+        )
+        .classList.toggle(
+            "show",
+            tutorialStep ===
+            totalTutorialSteps - 1
+        );
+}
+
+
+document
+    .getElementById(
+        "startTutorialButton"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            tutorialStep = 0;
+
+            document
+                .getElementById(
+                    "tutorialModal"
+                )
+                .classList.add("show");
+
+            document
+                .getElementById(
+                    "tutorialMessage"
+                )
+                .textContent = "";
+
+            document
+                .getElementById(
+                    "botToken"
+                )
+                .value = "";
+
+            updateTutorial();
+        }
+    );
+
+
+document
+    .getElementById(
+        "tutorialCancel"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            document
+                .getElementById(
+                    "tutorialModal"
+                )
+                .classList.remove("show");
+        }
+    );
+
+
+document
+    .getElementById(
+        "tutorialBack"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            if (tutorialStep > 0) {
+
+                tutorialStep--;
+
+                updateTutorial();
+            }
+        }
+    );
+
+
+document
+    .getElementById(
+        "tutorialNext"
+    )
+    .addEventListener(
+        "click",
+        async function() {
+
+            const message =
+                document.getElementById(
+                    "tutorialMessage"
+                );
+
+
+            if (
+                tutorialStep <
+                totalTutorialSteps - 1
+            ) {
+
+                tutorialStep++;
+
+                updateTutorial();
+
+                return;
+            }
+
+
+            const token =
+                document
+                    .getElementById(
+                        "botToken"
+                    )
+                    .value
+                    .trim();
+
+
+            if (!token) {
+
+                message.textContent =
+                    "Paste your bot token first.";
+
+                return;
+            }
+
+
+            message.textContent =
+                "Validating bot with Discord...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API +
+                        "/api/bots/add",
+                        {
+
+                            method: "POST",
+
+                            credentials: "include",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    token,
+
+                                    tutorialComplete:
+                                        true
+                                })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    message.textContent =
+                        data.message ||
+                        "Could not add bot.";
+
+                    return;
+                }
+
+
+                message.textContent =
+                    "✅ Bot added successfully!";
+
+
+                /*
+                   Remove token from memory immediately.
+                */
+
+                document
+                    .getElementById(
+                        "botToken"
+                    )
+                    .value = "";
+
+
+                setTimeout(
+                    async function() {
+
+                        document
+                            .getElementById(
+                                "tutorialModal"
+                            )
+                            .classList.remove(
+                                "show"
+                            );
+
+                        await loadBots();
+
+                        showPage(
+                            "my-bots"
+                        );
+
+                    },
+                    700
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+                message.textContent =
+                    "Could not connect to Botzen.";
+            }
+        }
+    );
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+document
+    .getElementById(
+        "logoutButton"
+    )
+    .addEventListener(
+        "click",
+        async function() {
+
+            await fetch(
+                API +
+                "/api/logout",
+                {
+                    method: "POST",
+                    credentials: "include"
+                }
+            );
+
+            window.location.href = "/";
+        }
+    );
+
+
+/* =========================
+   ESCAPE HTML
 ========================= */
 
 function escapeHTML(value) {
 
-    return String(value)
-
-        .replaceAll("&", "&amp;")
-
-        .replaceAll("<", "&lt;")
-
-        .replaceAll(">", "&gt;")
-
-        .replaceAll('"', "&quot;")
-
-        .replaceAll("'", "&#039;");
-
+    return String(value || "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }
 
 
 /* =========================
-   INITIAL LOAD
+   START
 ========================= */
 
-renderHome();
+loadAccount();
+
+loadHome();
 
 </script>
 
