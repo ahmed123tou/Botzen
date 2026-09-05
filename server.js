@@ -31,9 +31,9 @@ const discordURL =
 "&redirect_uri=" + encodeURIComponent(REDIRECT_URI) +
 "&scope=identify";
 
-```
+ 
 res.redirect(discordURL);
-```
+ 
 
 });
 
@@ -41,7 +41,7 @@ res.redirect(discordURL);
 app.get("/callback", async (req, res) => {
 const code = req.query.code;
 
-```
+ 
 if (!code) {
     return res.status(400).send(
         "Discord authorization code is missing."
@@ -127,7 +127,7 @@ try {
         "Something went wrong while connecting to Discord."
     );
 }
-```
+ 
 
 });
 
