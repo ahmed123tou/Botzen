@@ -1,25 +1,46 @@
-const discordButton = document.getElementById("discordButton");
-const signupButton = document.getElementById("signupButton");
-const backButton = document.getElementById("backButton");
+const discordButton =
+document.getElementById("discordButton");
 
-const loginScreen = document.getElementById("loginScreen");
-const signupScreen = document.getElementById("signupScreen");
+const signupButton =
+document.getElementById("signupButton");
 
-const signupForm = document.getElementById("signupForm");
-const signupMessage = document.getElementById("signupMessage");
+const backButton =
+document.getElementById("backButton");
+
+const loginScreen =
+document.getElementById("loginScreen");
+
+const signupScreen =
+document.getElementById("signupScreen");
+
+const signupForm =
+document.getElementById("signupForm");
+
+const signupMessage =
+document.getElementById("signupMessage");
+
+const passwordInput =
+document.getElementById("password");
+
+const passwordToggle =
+document.getElementById("passwordToggle");
 
 /* =========================
 DISCORD LOGIN
 ========================= */
 
 if (discordButton) {
+
+
 discordButton.addEventListener("click", function () {
 
-
     discordButton.disabled = true;
-    discordButton.textContent = "Connecting to Discord...";
 
-    const clientId = "1545716437987893308";
+    discordButton.textContent =
+        "Connecting to Discord...";
+
+    const clientId =
+        "1545716437987893308";
 
     const redirectUri =
         "https://botzen-r4do.onrender.com/callback";
@@ -44,13 +65,16 @@ OPEN SIGNUP
 ========================= */
 
 if (signupButton) {
+
+
 signupButton.addEventListener("click", function () {
 
-
     loginScreen.style.display = "none";
+
     signupScreen.style.display = "block";
 
-    document.title = "Botzen — Create Account";
+    document.title =
+        "Botzen — Create Account";
 });
 
 
@@ -61,15 +85,46 @@ BACK TO LOGIN
 ========================= */
 
 if (backButton) {
+
+
 backButton.addEventListener("click", function () {
 
-
     signupScreen.style.display = "none";
+
     loginScreen.style.display = "block";
 
-    document.title = "Botzen — Sign Up";
+    document.title =
+        "Botzen — Sign Up";
 
     signupMessage.textContent = "";
+});
+
+
+}
+
+/* =========================
+SHOW / HIDE PASSWORD
+========================= */
+
+if (passwordToggle && passwordInput) {
+
+
+passwordToggle.addEventListener("click", function () {
+
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+        passwordToggle.textContent =
+            "Hide";
+
+    } else {
+
+        passwordInput.type = "password";
+
+        passwordToggle.textContent =
+            "Show";
+    }
 });
 
 
@@ -80,22 +135,23 @@ SIGNUP FORM
 ========================= */
 
 if (signupForm) {
-signupForm.addEventListener("submit", function (event) {
 
+
+signupForm.addEventListener("submit", function (event) {
 
     event.preventDefault();
 
     const username =
-        document.getElementById("username").value.trim();
+        document.getElementById("username")
+            .value
+            .trim();
 
     const password =
-        document.getElementById("password").value;
-
-    const confirmPassword =
-        document.getElementById("confirmPassword").value;
+        passwordInput.value;
 
 
     if (username.length < 3) {
+
         signupMessage.textContent =
             "Username must be at least 3 characters.";
 
@@ -104,16 +160,9 @@ signupForm.addEventListener("submit", function (event) {
 
 
     if (password.length < 6) {
+
         signupMessage.textContent =
             "Password must be at least 6 characters.";
-
-        return;
-    }
-
-
-    if (password !== confirmPassword) {
-        signupMessage.textContent =
-            "Passwords do not match.";
 
         return;
     }
