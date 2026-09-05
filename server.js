@@ -9,6 +9,10 @@ const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
 const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
 
+if (!CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI) {
+console.warn("⚠️ Discord OAuth environment variables are missing.");
+}
+
 app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
@@ -22,7 +26,7 @@ return res.status(500).send(
 );
 }
 
-
+```
 const params = new URLSearchParams({
     client_id: CLIENT_ID,
     response_type: "code",
@@ -34,14 +38,14 @@ res.redirect(
     "https://discord.com/oauth2/authorize?" +
     params.toString()
 );
-
+```
 
 });
 
 app.get("/callback", async (req, res) => {
 const code = req.query.code;
 
-
+```
 if (!code) {
     return res.status(400).send(
         "Discord authorization code is missing."
@@ -49,15 +53,19 @@ if (!code) {
 }
 
 try {
+    console.log("🔐 Starting Discord OAuth token exchange...");
+
     const tokenResponse = await fetch(
         "https://discord.com/api/v10/oauth2/token",
         {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "Accept": "application/json",
                 "User-Agent": "Botzen/1.0"
             },
+
             body: new URLSearchParams({
                 client_id: CLIENT_ID,
                 client_secret: CLIENT_SECRET,
@@ -74,6 +82,25 @@ try {
         "Discord token HTTP status:",
         tokenResponse.status
     );
+
+    if (tokenResponse.status === 429) {
+        const retryAfter =
+            tokenResponse.headers.get("retry-after");
+
+        console.error(
+            "⚠️ Discord OAuth rate limited."
+        );
+
+        console.error(
+            "Retry-After:",
+            retryAfter
+        );
+
+        return res.status(429).send(
+            "Discord is temporarily rate-limiting Botzen. " +
+            "Please wait a few minutes and try again."
+        );
+    }
 
     if (!tokenResponse.ok) {
         console.error(
@@ -113,13 +140,19 @@ try {
         );
     }
 
+    console.log(
+        "✅ Discord access token received."
+    );
+
     const userResponse = await fetch(
         "https://discord.com/api/v10/users/@me",
         {
+            method: "GET",
+
             headers: {
-                Authorization:
+                "Authorization":
                     "Bearer " + tokenData.access_token,
-                Accept: "application/json",
+                "Accept": "application/json",
                 "User-Agent": "Botzen/1.0"
             }
         }
@@ -127,10 +160,25 @@ try {
 
     const userText = await userResponse.text();
 
+    console.log(
+        "Discord user HTTP status:",
+        userResponse.status
+    );
+
+    if (userResponse.status === 429) {
+        console.error(
+            "⚠️ Discord user endpoint rate limited."
+        );
+
+        return res.status(429).send(
+            "Discord is temporarily rate-limiting Botzen. " +
+            "Please wait a few minutes and try again."
+        );
+    }
+
     if (!userResponse.ok) {
         console.error(
-            "Discord user request failed:",
-            userResponse.status,
+            "Discord user response:",
             userText.substring(0, 2000)
         );
 
@@ -155,7 +203,7 @@ try {
     }
 
     console.log(
-        "Botzen login:",
+        "✅ Botzen login:",
         user.username,
         user.id
     );
@@ -164,7 +212,7 @@ try {
 
 } catch (error) {
     console.error(
-        "OAuth connection error:",
+        "❌ OAuth connection error:",
         error
     );
 
@@ -172,7 +220,7 @@ try {
         "Botzen could not connect to Discord."
     );
 }
-
+```
 
 });
 
