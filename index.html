@@ -29,34 +29,98 @@
         alt="Botzen"
     >
 
-    <h1>Welcome to Botzen</h1>
+    <div id="loginScreen">
 
-    <p class="subtitle">
-        Manage your Discord bots from one powerful dashboard.
-    </p>
+        <h1>Welcome to Botzen</h1>
 
-    <button
-        id="discordButton"
-        class="discord-btn"
-        type="button"
-    >
-        Continue with Discord
-    </button>
+        <p class="subtitle">
+            Manage your Discord bots from one powerful dashboard.
+        </p>
 
-    <div class="divider">
-        <span>OR</span>
+        <button
+            id="discordButton"
+            class="discord-btn"
+            type="button"
+        >
+            Continue with Discord
+        </button>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <button
+            id="signupButton"
+            class="signup-btn"
+            type="button"
+        >
+            Sign up without Discord
+        </button>
+
+        <p class="secure-text">
+            🔒 Your account is securely protected
+        </p>
+
     </div>
 
-    <a
-        href="/signup.html"
-        class="signup-btn"
-    >
-        Sign up without Discord
-    </a>
 
-    <p class="secure-text">
-        🔒 Your account is securely protected
-    </p>
+    <div id="signupScreen" style="display: none;">
+
+        <h1>Create your Botzen account</h1>
+
+        <p class="subtitle">
+            Create an account without using Discord.
+        </p>
+
+        <form id="signupForm">
+
+            <input
+                id="username"
+                type="text"
+                placeholder="Username"
+                autocomplete="username"
+                required
+            >
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Password"
+                autocomplete="new-password"
+                required
+            >
+
+            <input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm password"
+                autocomplete="new-password"
+                required
+            >
+
+            <button
+                class="discord-btn"
+                type="submit"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+        <button
+            id="backButton"
+            class="signup-btn"
+            type="button"
+        >
+            ← Back to Login
+        </button>
+
+        <p
+            id="signupMessage"
+            class="secure-text"
+        ></p>
+
+    </div>
 
 </main>
 
