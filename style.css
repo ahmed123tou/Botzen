@@ -176,3 +176,38 @@ h1 {
 
 
 }
+
+#signupScreen input {
+width: 100%;
+height: 50px;
+margin-bottom: 12px;
+padding: 0 15px;
+border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 10px;
+outline: none;
+background: #20232c;
+color: white;
+font-size: 14px;
+}
+
+#signupScreen input::placeholder {
+color: #777b84;
+}
+
+#signupScreen input:focus {
+border-color: #5865f2;
+}
+
+#signupScreen .discord-btn {
+margin-top: 4px;
+margin-bottom: 12px;
+}
+
+#signupScreen .signup-btn {
+background: transparent;
+border-color: rgba(255, 255, 255, 0.08);
+}
+
+#signupMessage {
+min-height: 18px;
+}
