@@ -168,8 +168,11 @@ signupForm.addEventListener("submit", function (event) {
     }
 
 
-    signupMessage.textContent =
-        "Account information is valid.";
+    /* Account information is valid.
+       Open the Botzen dashboard. */
+
+    window.location.href =
+        "/dashboard.html";
 });
 
 
