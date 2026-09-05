@@ -2,160 +2,53 @@
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Botzen — Signup</title>
+```
+<title>Botzen — Sign Up</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<link rel="icon" href="https://img.icons8.com/nolan/1200/bot.jpg">
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      font-family: Arial, Helvetica, sans-serif;
-
-      background: #111214;
-      color: white;
-    }
-
-    .signup-container {
-      width: 100%;
-      max-width: 500px;
-
-      padding: 40px;
-
-      text-align: center;
-
-      background: #1e1f22;
-      border-radius: 16px;
-
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
-    }
-
-    .botzen-icon {
-      width: 100px;
-      height: 100px;
-
-      object-fit: contain;
-
-      margin-bottom: 18px;
-
-      mix-blend-mode: multiply;
-
-      border-radius: 20px;
-    }
-
-    h1 {
-      margin: 0 0 12px 0;
-
-      font-size: 38px;
-      font-weight: 700;
-
-      color: white;
-    }
-
-    .subtitle {
-      margin: 0 0 30px 0;
-
-      color: #b5bac1;
-      font-size: 16px;
-      line-height: 1.5;
-    }
-
-    .discord-btn {
-      width: 100%;
-
-      background-color: #5865F2;
-      color: white;
-
-      font-size: 17px;
-      padding: 14px 20px;
-
-      border: none;
-      border-radius: 8px;
-
-      cursor: pointer;
-
-      font-weight: bold;
-
-      transition:
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .discord-btn:hover {
-      background-color: #4752C4;
-
-      transform: translateY(-2px);
-
-      box-shadow: 0 6px 18px rgba(88, 101, 242, 0.35);
-    }
-
-    .discord-btn:active {
-      transform: scale(0.97);
-    }
-
-    .required {
-      margin-top: 18px;
-
-      font-size: 13px;
-      color: #80848e;
-    }
-
-    @media (max-width: 600px) {
-      .signup-container {
-        margin: 20px;
-        padding: 35px 25px;
-      }
-
-      .botzen-icon {
-        width: 85px;
-        height: 85px;
-      }
-
-      h1 {
-        font-size: 30px;
-      }
-    }
-  </style>
+<link rel="stylesheet" href="style.css">
+```
 
 </head>
 
 <body>
 
-  <div class="signup-container">
+```
+<main class="auth-page">
 
-<img
-  class="botzen-icon"
-  src="https://img.icons8.com/nolan/1200/bot.jpg"
-  alt="Botzen"
->
+    <div class="auth-card">
 
-<h1>Sign up with Discord</h1>
+        <img
+            class="botzen-icon"
+            src="https://img.icons8.com/nolan/1200/bot.jpg"
+            alt="Botzen"
+        >
 
-<p class="subtitle">
-  Discord authentication is required to use Botzen.
-</p>
+        <h1>Welcome to Botzen</h1>
 
-<button class="discord-btn">
-  Sign up with Discord
-</button>
+        <p class="subtitle">
+            Manage your Discord bots from one powerful dashboard.
+        </p>
 
-<p class="required">
-  🔒 Secure Discord authentication required
-</p>
+        <button id="discordButton" class="discord-btn">
+            <span class="discord-icon">◉</span>
+            Continue with Discord
+        </button>
 
+        <p class="secure-text">
+            🔒 Discord authentication is required
+        </p>
 
-  </div>
+    </div>
+
+</main>
+
+<script src="script.js"></script>
+```
 
 </body>
 </html>
