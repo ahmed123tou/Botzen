@@ -1,171 +1,175 @@
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   }
 
 html,
 body {
-margin: 0;
 width: 100%;
 min-height: 100%;
 }
 
 body {
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
 font-family: Arial, Helvetica, sans-serif;
 background:
-radial-gradient(circle at 50% -20%, rgba(88, 101, 242, 0.18), transparent 45%),
-#111214;
+radial-gradient(
+circle at 50% 35%,
+rgba(88, 101, 242, 0.18),
+transparent 45%
+),
+#0b0d12;
 color: white;
+overflow: hidden;
 }
 
-.auth-page {
-min-height: 100vh;
-
-```
-display: flex;
-justify-content: center;
-align-items: center;
-
-padding: 25px;
-```
-
-}
+/* Main login card */
 
 .auth-card {
-width: 100%;
-max-width: 480px;
-
-```
-padding: 45px 40px;
-
+width: min(440px, calc(100vw - 40px));
+padding: 42px 36px 34px;
 text-align: center;
 
+ 
 background: rgba(30, 31, 34, 0.96);
-
-border: 1px solid rgba(255, 255, 255, 0.05);
-
-border-radius: 18px;
-
-box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.45),
-    0 0 35px rgba(88, 101, 242, 0.08);
-```
-
-}
-
-.botzen-icon {
-width: 105px;
-height: 105px;
-
-```
-object-fit: cover;
-
+border: 1px solid rgba(255, 255, 255, 0.07);
 border-radius: 22px;
 
-margin-bottom: 20px;
+box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.45),
+    0 0 45px rgba(88, 101, 242, 0.08);
+
+backdrop-filter: blur(14px);
+ 
+
+}
+
+/* Botzen icon */
+
+.botzen-icon {
+width: 92px;
+height: 92px;
+object-fit: cover;
+border-radius: 22px;
+
+ 
+margin: 0 auto 24px;
+
+display: block;
 
 mix-blend-mode: multiply;
-```
+
+filter: drop-shadow(
+    0 8px 20px rgba(88, 101, 242, 0.2)
+);
+ 
 
 }
+
+/* Title */
 
 h1 {
-margin: 0;
-
-```
-font-size: 34px;
+font-size: 32px;
 font-weight: 700;
-```
-
+letter-spacing: -0.7px;
+margin-bottom: 10px;
 }
+
+/* Subtitle */
 
 .subtitle {
-margin: 12px 0 30px;
-
-```
-color: #b5bac1;
-
+color: #aeb0b5;
 font-size: 15px;
 line-height: 1.6;
-```
-
+margin: 0 auto 28px;
+max-width: 340px;
 }
+
+/* Discord button */
 
 .discord-btn {
 width: 100%;
+height: 52px;
 
-```
-padding: 15px 20px;
-
-border: 0;
-border-radius: 9px;
+ 
+border: none;
+border-radius: 12px;
 
 background: #5865f2;
-
 color: white;
 
-font-size: 16px;
+font-size: 15px;
 font-weight: 700;
 
 cursor: pointer;
 
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 10px;
-
 transition:
-    background 0.2s ease,
     transform 0.15s ease,
+    background 0.2s ease,
     box-shadow 0.2s ease;
-```
+ 
 
 }
 
 .discord-btn:hover {
 background: #4752c4;
+transform: translateY(-1px);
 
-```
-transform: translateY(-2px);
-
-box-shadow: 0 8px 25px rgba(88, 101, 242, 0.35);
-```
+ 
+box-shadow:
+    0 8px 24px rgba(88, 101, 242, 0.28);
+ 
 
 }
 
 .discord-btn:active {
-transform: scale(0.97);
+transform: translateY(0);
 }
 
-.discord-icon {
-font-size: 18px;
+.discord-btn:disabled {
+opacity: 0.75;
+cursor: wait;
+transform: none;
 }
+
+/* Security text */
 
 .secure-text {
-margin: 18px 0 0;
+margin-top: 16px;
 
-```
-color: #72767d;
+ 
+color: #777b84;
 
 font-size: 12px;
-```
+
 
 }
 
-@media (max-width: 600px) {
+/* Mobile */
 
-```
+@media (max-width: 600px) {
+body {
+padding: 20px;
+}
+
+
 .auth-card {
-    padding: 35px 25px;
+    width: 100%;
+    padding: 34px 24px 28px;
 }
 
 .botzen-icon {
-    width: 85px;
-    height: 85px;
+    width: 78px;
+    height: 78px;
 }
 
 h1 {
-    font-size: 28px;
+    font-size: 27px;
 }
-```
+
 
 }
