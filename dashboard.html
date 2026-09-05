@@ -671,7 +671,7 @@ content="width=device-width, initial-scale=1.0"
 
 <aside class="sidebar">
 
-```
+
 <div class="brand">
 
     <img
@@ -733,7 +733,7 @@ content="width=device-width, initial-scale=1.0"
 >
     ✉️│Invite
 </div>
-```
+
 
 </aside>
 
@@ -743,7 +743,7 @@ content="width=device-width, initial-scale=1.0"
 
 <main class="content">
 
-```
+
 <!-- HOME -->
 
 <section
@@ -1058,7 +1058,7 @@ content="width=device-width, initial-scale=1.0"
     </div>
 
 </section>
-```
+
 
 </main>
 
@@ -1197,7 +1197,7 @@ function renderHome() {
 
     if (bots.length === 0) {
 
-        container.innerHTML = `
+        container.innerHTML = 
 
             <div class="empty-card">
 
@@ -1224,14 +1224,14 @@ function renderHome() {
 
             </div>
 
-        `;
+        ;
 
         return;
 
     }
 
 
-    container.innerHTML = `
+    container.innerHTML = 
 
         <div class="bot-list">
 
@@ -1243,7 +1243,7 @@ function renderHome() {
 
         </div>
 
-    `;
+    ;
 
 }
 
@@ -1254,7 +1254,7 @@ function renderHome() {
 
 function createBotCard(bot) {
 
-    return `
+    return 
 
         <div class="bot-card">
 
@@ -1308,7 +1308,7 @@ function createBotCard(bot) {
 
         </div>
 
-    `;
+    ;
 
 }
 
@@ -1325,7 +1325,7 @@ function renderMyBots() {
 
     if (bots.length === 0) {
 
-        container.innerHTML = `
+        container.innerHTML = 
 
             <div class="no-bots">
 
@@ -1346,14 +1346,14 @@ function renderMyBots() {
 
             </div>
 
-        `;
+        ;
 
         return;
 
     }
 
 
-    container.innerHTML = `
+    container.innerHTML = 
 
         <div class="bot-list">
 
@@ -1365,7 +1365,7 @@ function renderMyBots() {
 
         </div>
 
-    `;
+    ;
 
 }
 
@@ -1509,13 +1509,13 @@ function renderInviteBots() {
 
     if (bots.length === 0) {
 
-        select.innerHTML = `
+        select.innerHTML = 
 
             <option value="">
                 No bots available
             </option>
 
-        `;
+        ;
 
         return;
 
@@ -1603,7 +1603,7 @@ document
                 "block";
 
 
-            result.innerHTML = `
+            result.innerHTML = 
 
                 <strong>
                     Your Discord invite:
@@ -1619,7 +1619,7 @@ document
                     ${inviteURL}
                 </a>
 
-            `;
+            ;
 
         }
     );
