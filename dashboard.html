@@ -4,12 +4,12 @@
 
 <head>
 
-
 <meta charset="UTF-8">
 
 <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
 >
 
 <title>Botzen — Dashboard</title>
@@ -25,8 +25,13 @@
         box-sizing: border-box;
     }
 
+    html,
     body {
         margin: 0;
+        min-height: 100%;
+    }
+
+    body {
         min-height: 100vh;
 
         font-family: Arial, Helvetica, sans-serif;
@@ -34,6 +39,11 @@
         background: #111214;
         color: white;
     }
+
+
+    /* =========================
+       SIDEBAR
+    ========================= */
 
     .sidebar {
         position: fixed;
@@ -46,14 +56,31 @@
         background: #18191c;
 
         border-right: 1px solid rgba(255,255,255,0.05);
+
+        overflow-y: auto;
     }
 
     .brand {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+
         font-size: 24px;
         font-weight: 800;
 
         margin-bottom: 30px;
         padding-left: 10px;
+    }
+
+    .brand-icon {
+        width: 32px;
+        height: 32px;
+
+        border-radius: 8px;
+
+        object-fit: cover;
+
+        mix-blend-mode: multiply;
     }
 
     .section-title {
@@ -68,6 +95,11 @@
     }
 
     .nav-item {
+        display: flex;
+        align-items: center;
+
+        width: 100%;
+
         padding: 11px 12px;
 
         border-radius: 7px;
@@ -78,18 +110,63 @@
 
         cursor: pointer;
 
-        transition: 0.2s;
+        transition:
+            background 0.2s,
+            color 0.2s,
+            transform 0.15s;
     }
 
     .nav-item:hover {
         background: #2b2d31;
         color: white;
+        transform: translateX(2px);
     }
+
+    .nav-item.active {
+        background: #5865f2;
+        color: white;
+    }
+
+
+    /* =========================
+       CONTENT
+    ========================= */
 
     .content {
         margin-left: 250px;
         padding: 45px;
+
+        min-height: 100vh;
     }
+
+    .page {
+        display: none;
+
+        animation: pageIn 0.2s ease;
+    }
+
+    .page.active {
+        display: block;
+    }
+
+    @keyframes pageIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+
+    /* =========================
+       HEADERS
+    ========================= */
 
     .welcome {
         font-size: 32px;
@@ -97,38 +174,67 @@
         margin-bottom: 10px;
     }
 
+    .page-title {
+        font-size: 30px;
+        font-weight: 800;
+
+        margin-bottom: 8px;
+    }
+
     .description {
         color: #b5bac1;
         margin-bottom: 30px;
     }
 
-    .empty-card {
+
+    /* =========================
+       CARDS
+    ========================= */
+
+    .empty-card,
+    .card {
         padding: 30px;
 
-        max-width: 700px;
+        max-width: 800px;
 
         background: #1e1f22;
 
         border-radius: 14px;
 
         border: 1px solid rgba(255,255,255,0.05);
+
+        margin-bottom: 20px;
     }
 
-    .empty-card h2 {
+    .empty-card h2,
+    .card h2 {
         margin-top: 0;
     }
 
-    .empty-card p {
+    .empty-card p,
+    .card p {
         color: #b5bac1;
         line-height: 1.6;
     }
 
-    .add-button {
-        display: inline-block;
 
-        margin-top: 15px;
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .add-button,
+    .primary-button,
+    .secondary-button,
+    .invite-button {
+
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
 
         padding: 12px 18px;
+
+        border: none;
 
         background: #5865f2;
 
@@ -140,12 +246,400 @@
 
         font-weight: bold;
 
+        cursor: pointer;
+
+        transition:
+            background 0.2s,
+            transform 0.15s;
+    }
+
+    .add-button:hover,
+    .primary-button:hover,
+    .invite-button:hover {
+        background: #4752c4;
+        transform: translateY(-1px);
+    }
+
+    .secondary-button {
+        background: #2b2d31;
+        margin-left: 8px;
+    }
+
+    .secondary-button:hover {
+        background: #3a3d44;
+    }
+
+
+    /* =========================
+       BOT CARDS
+    ========================= */
+
+    .bot-list {
+        display: grid;
+
+        grid-template-columns:
+            repeat(auto-fill, minmax(280px, 1fr));
+
+        gap: 18px;
+
+        max-width: 1000px;
+    }
+
+    .bot-card {
+        background: #1e1f22;
+
+        border: 1px solid rgba(255,255,255,0.05);
+
+        border-radius: 14px;
+
+        padding: 20px;
+
+        transition:
+            transform 0.2s,
+            border-color 0.2s;
+    }
+
+    .bot-card:hover {
+        transform: translateY(-2px);
+
+        border-color:
+            rgba(88,101,242,0.4);
+    }
+
+    .bot-top {
+        display: flex;
+        align-items: center;
+
+        gap: 14px;
+
+        margin-bottom: 18px;
+    }
+
+    .bot-avatar {
+        width: 58px;
+        height: 58px;
+
+        border-radius: 14px;
+
+        object-fit: cover;
+
+        background: #2b2d31;
+    }
+
+    .bot-name {
+        font-size: 18px;
+        font-weight: 800;
+
+        margin-bottom: 5px;
+    }
+
+    .bot-id {
+        color: #72767d;
+
+        font-size: 12px;
+    }
+
+    .bot-status {
+        display: flex;
+        align-items: center;
+
+        gap: 7px;
+
+        font-size: 12px;
+
+        color: #b5bac1;
+
+        margin-bottom: 18px;
+    }
+
+    .status-dot {
+        width: 9px;
+        height: 9px;
+
+        border-radius: 50%;
+
+        background: #23a559;
+    }
+
+    .status-dot.offline {
+        background: #80848e;
+    }
+
+    .manage-button {
+        width: 100%;
+
+        padding: 10px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        background: #2b2d31;
+
+        color: white;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
         transition: 0.2s;
     }
 
-    .add-button:hover {
-        background: #4752c4;
+    .manage-button:hover {
+        background: #5865f2;
     }
+
+
+    /* =========================
+       FORMS
+    ========================= */
+
+    .form-card {
+        max-width: 650px;
+
+        padding: 30px;
+
+        background: #1e1f22;
+
+        border-radius: 14px;
+
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .form-label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        color: #b5bac1;
+
+        font-size: 13px;
+
+        font-weight: 700;
+    }
+
+    .form-input,
+    .form-select {
+
+        width: 100%;
+
+        height: 48px;
+
+        padding: 0 14px;
+
+        margin-bottom: 18px;
+
+        border: 1px solid rgba(255,255,255,0.08);
+
+        border-radius: 8px;
+
+        outline: none;
+
+        background: #111214;
+
+        color: white;
+
+        font-size: 14px;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+        border-color: #5865f2;
+    }
+
+    .form-help {
+        color: #72767d;
+
+        font-size: 12px;
+
+        line-height: 1.5;
+
+        margin-top: -8px;
+
+        margin-bottom: 20px;
+    }
+
+    .message {
+        margin-top: 15px;
+
+        color: #b5bac1;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================
+       ANNOUNCEMENTS
+    ========================= */
+
+    .announcement {
+        max-width: 850px;
+
+        padding: 25px;
+
+        background: #1e1f22;
+
+        border: 1px solid rgba(255,255,255,0.05);
+
+        border-radius: 14px;
+
+        margin-bottom: 18px;
+    }
+
+    .announcement-user {
+        display: flex;
+        align-items: center;
+
+        gap: 12px;
+
+        margin-bottom: 20px;
+    }
+
+    .announcement-avatar {
+        width: 45px;
+        height: 45px;
+
+        border-radius: 50%;
+
+        object-fit: cover;
+    }
+
+    .announcement-name {
+        font-weight: 800;
+    }
+
+    .announcement-username {
+        color: #72767d;
+
+        font-size: 12px;
+
+        margin-top: 3px;
+    }
+
+    .announcement h2 {
+        margin-bottom: 10px;
+
+        font-size: 20px;
+    }
+
+    .announcement p {
+        color: #b5bac1;
+
+        line-height: 1.7;
+    }
+
+    .built-with {
+        margin-top: 22px;
+
+        padding-top: 18px;
+
+        border-top:
+            1px solid rgba(255,255,255,0.06);
+    }
+
+    .built-with-title {
+        font-size: 12px;
+
+        color: #72767d;
+
+        font-weight: 800;
+
+        letter-spacing: 0.8px;
+
+        margin-bottom: 12px;
+    }
+
+    .tools {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 8px;
+    }
+
+    .tool {
+        padding: 7px 10px;
+
+        background: #2b2d31;
+
+        border-radius: 7px;
+
+        color: #b5bac1;
+
+        font-size: 12px;
+    }
+
+    .tool a {
+        color: inherit;
+
+        text-decoration: none;
+    }
+
+    .tool:hover {
+        background: #363940;
+        color: white;
+    }
+
+
+    /* =========================
+       INVITE
+    ========================= */
+
+    .invite-card {
+        max-width: 650px;
+
+        padding: 30px;
+
+        background: #1e1f22;
+
+        border-radius: 14px;
+
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .invite-result {
+        margin-top: 20px;
+
+        padding: 15px;
+
+        background: #111214;
+
+        border-radius: 8px;
+
+        word-break: break-all;
+
+        color: #b5bac1;
+
+        font-size: 13px;
+
+        display: none;
+    }
+
+
+    /* =========================
+       EMPTY STATE
+    ========================= */
+
+    .no-bots {
+        padding: 30px;
+
+        max-width: 700px;
+
+        background: #1e1f22;
+
+        border-radius: 14px;
+
+        border: 1px solid rgba(255,255,255,0.05);
+
+        color: #b5bac1;
+
+        line-height: 1.6;
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
 
     @media (max-width: 700px) {
 
@@ -158,7 +652,8 @@
             padding: 25px;
         }
 
-        .welcome {
+        .welcome,
+        .page-title {
             font-size: 26px;
         }
 
@@ -166,53 +661,95 @@
 
 </style>
 
-
 </head>
 
 <body>
 
+<!-- =========================
+     SIDEBAR
+========================= -->
 
 <aside class="sidebar">
 
-    <div class="brand">
-        🤖 Botzen
-    </div>
+```
+<div class="brand">
 
-    <div class="section-title">
-        🌐 INFORMATION
-    </div>
+    <img
+        class="brand-icon"
+        src="https://img.icons8.com/nolan/1200/bot.jpg"
+        alt="Botzen"
+    >
 
-    <div class="nav-item">
-        🏠│Home
-    </div>
+    <span>Botzen</span>
 
-    <div class="nav-item">
-        📜│Announcements
-    </div>
+</div>
 
-    <div class="section-title">
-        🤖 BOT DIRECTORY
-    </div>
 
-    <div class="nav-item">
-        🤖│My Bots
-    </div>
+<div class="section-title">
+    🌐 INFORMATION
+</div>
 
-    <div class="nav-item">
-        ➕│Add Bot
-    </div>
+<div
+    class="nav-item active"
+    data-page="home"
+>
+    🏠│Home
+</div>
 
-    <div class="section-title">
-        🔗 CONNECTIONS
-    </div>
+<div
+    class="nav-item"
+    data-page="announcements"
+>
+    📜│Announcements
+</div>
 
-    <div class="nav-item">
-        ✉️│Invite
-    </div>
+
+<div class="section-title">
+    🤖 BOT DIRECTORY
+</div>
+
+<div
+    class="nav-item"
+    data-page="my-bots"
+>
+    🤖│My Bots
+</div>
+
+<div
+    class="nav-item"
+    data-page="add-bot"
+>
+    ➕│Add Bot
+</div>
+
+
+<div class="section-title">
+    🔗 CONNECTIONS
+</div>
+
+<div
+    class="nav-item"
+    data-page="invite"
+>
+    ✉️│Invite
+</div>
+```
 
 </aside>
 
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
 <main class="content">
+
+```
+<!-- HOME -->
+
+<section
+    id="page-home"
+    class="page active"
+>
 
     <div class="welcome">
         Welcome to Botzen 👋
@@ -222,30 +759,900 @@
         Your Discord account is connected successfully.
     </div>
 
-    <div class="empty-card">
 
-        <h2>🤖 Your Bots</h2>
+    <div id="homeContent"></div>
+
+</section>
+
+
+
+<!-- ANNOUNCEMENTS -->
+
+<section
+    id="page-announcements"
+    class="page"
+>
+
+    <div class="page-title">
+        📜 Announcements
+    </div>
+
+    <div class="description">
+        The latest updates and changes to Botzen.
+    </div>
+
+
+    <div class="announcement">
+
+        <div class="announcement-user">
+
+            <img
+                class="announcement-avatar"
+                src="https://files.catbox.moe/c0eqba.png"
+                alt="Ahmed"
+            >
+
+            <div>
+
+                <div class="announcement-name">
+                    𝑨𝒉𝒎𝒆𝒅
+                </div>
+
+                <div class="announcement-username">
+                    @ahmed123tou
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <h2>
+            🚀 Welcome to Botzen
+        </h2>
 
         <p>
-            You don't have any bots connected to Botzen yet.
+            Botzen is a modern dashboard designed to make
+            managing Discord bots easier. This is the beginning
+            of the project, and more bot management features
+            will be added over time.
         </p>
 
-        <p>
-            Add your first Discord bot to start managing it
-            from your Botzen dashboard.
-        </p>
 
-        <a
-            class="add-button"
-            href="#"
-        >
-            ➕ Add a Bot
-        </a>
+        <div class="built-with">
+
+            <div class="built-with-title">
+                🛠️ WHAT I USED TO MAKE THIS
+            </div>
+
+
+            <div class="tools">
+
+                <div class="tool">
+                    GitHub
+                </div>
+
+                <div class="tool">
+                    Render
+                </div>
+
+                <div class="tool">
+                    ChatGPT
+                </div>
+
+                <div class="tool">
+                    Gemini
+                </div>
+
+                <div class="tool">
+                    HTML
+                </div>
+
+                <div class="tool">
+                    CSS
+                </div>
+
+                <div class="tool">
+                    JavaScript
+                </div>
+
+                <div class="tool">
+                    <a
+                        href="https://static.app/html-test"
+                        target="_blank"
+                    >
+                        HTML Tester
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
+</section>
+
+
+
+<!-- MY BOTS -->
+
+<section
+    id="page-my-bots"
+    class="page"
+>
+
+    <div class="page-title">
+        🤖 My Bots
+    </div>
+
+    <div class="description">
+        View and manage all bots connected to your Botzen account.
+    </div>
+
+
+    <div id="myBotsContent"></div>
+
+</section>
+
+
+
+<!-- ADD BOT -->
+
+<section
+    id="page-add-bot"
+    class="page"
+>
+
+    <div class="page-title">
+        ➕ Add a Bot
+    </div>
+
+    <div class="description">
+        Connect a Discord bot to your Botzen dashboard.
+    </div>
+
+
+    <div class="form-card">
+
+        <h2>
+            Add Bot
+        </h2>
+
+        <p>
+            Enter the bot information below.
+        </p>
+
+
+        <form id="addBotForm">
+
+            <label
+                class="form-label"
+                for="botName"
+            >
+                Bot Name
+            </label>
+
+            <input
+                id="botName"
+                class="form-input"
+                type="text"
+                placeholder="Example: Echo"
+                required
+            >
+
+
+            <label
+                class="form-label"
+                for="botId"
+            >
+                Bot ID
+            </label>
+
+            <input
+                id="botId"
+                class="form-input"
+                type="text"
+                placeholder="Discord Bot ID"
+                required
+            >
+
+
+            <label
+                class="form-label"
+                for="botKey"
+            >
+                Bot Key
+            </label>
+
+            <input
+                id="botKey"
+                class="form-input"
+                type="text"
+                placeholder="Enter your Botzen bot key"
+                required
+            >
+
+            <div class="form-help">
+                Your bot key is used to identify the bot you want
+                to connect to Botzen. Never put a Discord bot token
+                into this field.
+            </div>
+
+
+            <button
+                class="primary-button"
+                type="submit"
+            >
+                ➕ Add Bot
+            </button>
+
+        </form>
+
+
+        <div
+            id="addBotMessage"
+            class="message"
+        ></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- INVITE -->
+
+<section
+    id="page-invite"
+    class="page"
+>
+
+    <div class="page-title">
+        ✉️ Invite
+    </div>
+
+    <div class="description">
+        Invite one of your Discord bots to a server.
+    </div>
+
+
+    <div class="invite-card">
+
+        <h2>
+            Invite a Bot
+        </h2>
+
+        <p>
+            Select a bot below to generate its Discord invite.
+        </p>
+
+
+        <label
+            class="form-label"
+            for="inviteBot"
+        >
+            Select Bot
+        </label>
+
+        <select
+            id="inviteBot"
+            class="form-select"
+        ></select>
+
+
+        <button
+            id="generateInvite"
+            class="invite-button"
+            type="button"
+        >
+            🔗 Generate Invite
+        </button>
+
+
+        <div
+            id="inviteResult"
+            class="invite-result"
+        ></div>
+
+    </div>
+
+</section>
+```
+
 </main>
 
+<script>
+
+
+/* =========================
+   BOTZEN BOT STORAGE
+========================= */
+
+const BOT_STORAGE_KEY =
+    "BOTZEN_BOTS";
+
+
+let bots =
+    JSON.parse(
+        localStorage.getItem(BOT_STORAGE_KEY) || "[]"
+    );
+
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+const navItems =
+    document.querySelectorAll(".nav-item");
+
+const pages =
+    document.querySelectorAll(".page");
+
+
+function showPage(pageName) {
+
+    pages.forEach(function(page) {
+
+        page.classList.remove("active");
+
+    });
+
+
+    const selectedPage =
+        document.getElementById(
+            "page-" + pageName
+        );
+
+
+    if (selectedPage) {
+
+        selectedPage.classList.add("active");
+
+    }
+
+
+    navItems.forEach(function(item) {
+
+        item.classList.remove("active");
+
+    });
+
+
+    const selectedNav =
+        document.querySelector(
+            '.nav-item[data-page="' +
+            pageName +
+            '"]'
+        );
+
+
+    if (selectedNav) {
+
+        selectedNav.classList.add("active");
+
+    }
+
+
+    if (pageName === "home") {
+
+        renderHome();
+
+    }
+
+
+    if (pageName === "my-bots") {
+
+        renderMyBots();
+
+    }
+
+
+    if (pageName === "invite") {
+
+        renderInviteBots();
+
+    }
+
+}
+
+
+navItems.forEach(function(item) {
+
+    item.addEventListener("click", function() {
+
+        const pageName =
+            item.dataset.page;
+
+        showPage(pageName);
+
+    });
+
+});
+
+
+/* =========================
+   SAVE BOTS
+========================= */
+
+function saveBots() {
+
+    localStorage.setItem(
+        BOT_STORAGE_KEY,
+        JSON.stringify(bots)
+    );
+
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function renderHome() {
+
+    const container =
+        document.getElementById("homeContent");
+
+
+    if (bots.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty-card">
+
+                <h2>
+                    🤖 Your Bots
+                </h2>
+
+                <p>
+                    You don't have any bots connected to
+                    Botzen yet.
+                </p>
+
+                <p>
+                    Add your first Discord bot to start
+                    managing it from your Botzen dashboard.
+                </p>
+
+                <button
+                    class="add-button"
+                    onclick="showPage('add-bot')"
+                >
+                    ➕ Add a Bot
+                </button>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="bot-list">
+
+            ${bots.map(function(bot) {
+
+                return createBotCard(bot);
+
+            }).join("")}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================
+   BOT CARD
+========================= */
+
+function createBotCard(bot) {
+
+    return `
+
+        <div class="bot-card">
+
+            <div class="bot-top">
+
+                <img
+                    class="bot-avatar"
+                    src="${escapeHTML(bot.avatar)}"
+                    alt="${escapeHTML(bot.name)}"
+                    onerror="this.src='https://img.icons8.com/nolan/1200/bot.jpg'"
+                >
+
+                <div>
+
+                    <div class="bot-name">
+                        ${escapeHTML(bot.name)}
+                    </div>
+
+                    <div class="bot-id">
+                        ID: ${escapeHTML(bot.id)}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="bot-status">
+
+                <span
+                    class="status-dot ${
+                        bot.online ? "" : "offline"
+                    }"
+                ></span>
+
+                ${
+                    bot.online
+                        ? "Online"
+                        : "Offline"
+                }
+
+            </div>
+
+
+            <button
+                class="manage-button"
+                onclick="manageBot('${escapeHTML(bot.id)}')"
+            >
+                ⚙️ Manage
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================
+   MY BOTS
+========================= */
+
+function renderMyBots() {
+
+    const container =
+        document.getElementById("myBotsContent");
+
+
+    if (bots.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="no-bots">
+
+                <h2>
+                    🤖 No Bots Yet
+                </h2>
+
+                <p>
+                    You haven't added any bots to Botzen.
+                </p>
+
+                <button
+                    class="add-button"
+                    onclick="showPage('add-bot')"
+                >
+                    ➕ Add Your First Bot
+                </button>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="bot-list">
+
+            ${bots.map(function(bot) {
+
+                return createBotCard(bot);
+
+            }).join("")}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================
+   MANAGE BOT
+========================= */
+
+function manageBot(botId) {
+
+    const bot =
+        bots.find(function(item) {
+
+            return item.id === botId;
+
+        });
+
+
+    if (!bot) {
+
+        return;
+
+    }
+
+
+    alert(
+        "Botzen Bot Manager\\n\\n" +
+        "Bot: " + bot.name + "\\n" +
+        "ID: " + bot.id + "\\n\\n" +
+        "The full bot management panel will be added next."
+    );
+
+}
+
+
+/* =========================
+   ADD BOT
+========================= */
+
+const addBotForm =
+    document.getElementById("addBotForm");
+
+
+addBotForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+
+        const name =
+            document.getElementById("botName")
+                .value
+                .trim();
+
+
+        const id =
+            document.getElementById("botId")
+                .value
+                .trim();
+
+
+        const key =
+            document.getElementById("botKey")
+                .value
+                .trim();
+
+
+        const message =
+            document.getElementById(
+                "addBotMessage"
+            );
+
+
+        if (bots.some(function(bot) {
+
+            return bot.id === id;
+
+        })) {
+
+            message.textContent =
+                "❌ A bot with this ID is already added.";
+
+            return;
+
+        }
+
+
+        const newBot = {
+
+            name: name,
+
+            id: id,
+
+            key: key,
+
+            avatar:
+                "https://img.icons8.com/nolan/1200/bot.jpg",
+
+            online: false
+
+        };
+
+
+        bots.push(newBot);
+
+        saveBots();
+
+
+        message.textContent =
+            "✅ Bot added successfully!";
+
+
+        addBotForm.reset();
+
+
+        setTimeout(function() {
+
+            message.textContent = "";
+
+            showPage("my-bots");
+
+        }, 700);
+
+    }
+);
+
+
+/* =========================
+   INVITE
+========================= */
+
+function renderInviteBots() {
+
+    const select =
+        document.getElementById("inviteBot");
+
+
+    select.innerHTML = "";
+
+
+    if (bots.length === 0) {
+
+        select.innerHTML = `
+
+            <option value="">
+                No bots available
+            </option>
+
+        `;
+
+        return;
+
+    }
+
+
+    bots.forEach(function(bot) {
+
+        const option =
+            document.createElement("option");
+
+
+        option.value =
+            bot.id;
+
+
+        option.textContent =
+            bot.name +
+            " — " +
+            bot.id;
+
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+document
+    .getElementById("generateInvite")
+    .addEventListener(
+        "click",
+        function() {
+
+            const botId =
+                document.getElementById(
+                    "inviteBot"
+                ).value;
+
+
+            const result =
+                document.getElementById(
+                    "inviteResult"
+                );
+
+
+            if (!botId) {
+
+                result.style.display =
+                    "block";
+
+                result.textContent =
+                    "❌ You need to add a bot first.";
+
+                return;
+
+            }
+
+
+            const bot =
+                bots.find(function(item) {
+
+                    return item.id === botId;
+
+                });
+
+
+            if (!bot) {
+
+                return;
+
+            }
+
+
+            const inviteURL =
+                "https://discord.com/oauth2/authorize" +
+                "?client_id=" +
+                encodeURIComponent(bot.id) +
+                "&permissions=8" +
+                "&scope=bot%20applications.commands";
+
+
+            result.style.display =
+                "block";
+
+
+            result.innerHTML = `
+
+                <strong>
+                    Your Discord invite:
+                </strong>
+
+                <br><br>
+
+                <a
+                    href="${inviteURL}"
+                    target="_blank"
+                    style="color:#8f96ff;"
+                >
+                    ${inviteURL}
+                </a>
+
+            `;
+
+        }
+    );
+
+
+/* =========================
+   HTML SAFETY
+========================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+renderHome();
+
+</script>
 
 </body>
 
