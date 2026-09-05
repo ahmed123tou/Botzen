@@ -36,15 +36,14 @@ res.sendFile(path.join(__dirname, "index.html"));
 // ================================
 
 app.get("/auth/discord", (req, res) => {
+const discordURL =
+"https://discord.com/oauth2/authorize" +
+"?client_id=" + encodeURIComponent(CLIENT_ID) +
+"&response_type=code" +
+"&redirect_uri=" + encodeURIComponent(REDIRECT_URI) +
+"&scope=identify";
 
 ```
-const discordURL =
-    "https://discord.com/oauth2/authorize" +
-    "?client_id=" + encodeURIComponent(CLIENT_ID) +
-    "&response_type=code" +
-    "&redirect_uri=" + encodeURIComponent(REDIRECT_URI) +
-    "&scope=identify";
-
 res.redirect(discordURL);
 ```
 
@@ -55,16 +54,14 @@ res.redirect(discordURL);
 // ================================
 
 app.get("/callback", async (req, res) => {
-
-```
 const code = req.query.code;
 
+```
 if (!code) {
     return res.status(400).send("Discord authorization code is missing.");
 }
 
 try {
-
     // Exchange code for access token
     const tokenResponse = await fetch(
         "https://discord.com/api/oauth2/token",
@@ -88,14 +85,12 @@ try {
     const tokenData = await tokenResponse.json();
 
     if (!tokenResponse.ok) {
-
         console.error("Discord token error:", tokenData);
 
         return res.status(500).send(
             "Discord authentication failed."
         );
     }
-
 
     // Get Discord account
     const userResponse = await fetch(
@@ -110,7 +105,6 @@ try {
     const user = await userResponse.json();
 
     if (!userResponse.ok) {
-
         console.error("Discord user error:", user);
 
         return res.status(500).send(
@@ -118,11 +112,12 @@ try {
         );
     }
 
-
     console.log("Botzen user:", user);
 
-
+    // ================================
     // Temporary dashboard
+    // ================================
+
     res.send(`
         <!DOCTYPE html>
 
@@ -243,6 +238,8 @@ try {
                     height: 55px;
 
                     border-radius: 50%;
+
+                    object-fit: cover;
                 }
 
                 .username {
@@ -254,6 +251,23 @@ try {
                     color: #72767d;
                     font-size: 13px;
                     margin-top: 4px;
+                }
+
+                @media (max-width: 700px) {
+
+                    .sidebar {
+                        width: 210px;
+                    }
+
+                    .content {
+                        margin-left: 210px;
+                        padding: 25px;
+                    }
+
+                    .welcome {
+                        font-size: 26px;
+                    }
+
                 }
 
             </style>
@@ -280,7 +294,6 @@ try {
                     📜│Announcements
                 </div>
 
-
                 <div class="section-title">
                     🤖 BOT DIRECTORY
                 </div>
@@ -293,7 +306,6 @@ try {
                     ➕│Add Bot
                 </div>
 
-
                 <div class="section-title">
                     🔗 CONNECTIONS
                 </div>
@@ -303,7 +315,6 @@ try {
                 </div>
 
             </aside>
-
 
             <main class="content">
 
@@ -319,12 +330,12 @@ try {
 
                     ${
                         user.avatar
-                        ? `<img
-                            class="avatar"
-                            src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png"
-                            alt="Avatar"
-                          >`
-                        : `<div class="avatar"></div>`
+                            ? `<img
+                                class="avatar"
+                                src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png"
+                                alt="Avatar"
+                              >`
+                            : `<div class="avatar"></div>`
                     }
 
                     <div>
@@ -358,7 +369,7 @@ try {
         "Something went wrong while connecting to Discord."
     );
 }
-```
+
 
 });
 
@@ -367,16 +378,12 @@ try {
 // ================================
 
 function escapeHTML(value) {
-
-```
 return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-```
-
+.replace(/&/g, "&")
+.replace(/</g, "<")
+.replace(/>/g, ">")
+.replace(/"/g, """)
+.replace(/'/g, "'");
 }
 
 // ================================
@@ -384,11 +391,6 @@ return String(value)
 // ================================
 
 app.listen(PORT, () => {
-
-```
-console.log(
-    `🤖 Botzen running on port ${PORT}`
-);
-```
-
+console.log(`🤖 Botzen running on port ${PORT}`);
 });
+
